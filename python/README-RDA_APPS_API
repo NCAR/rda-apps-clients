@@ -13,10 +13,10 @@ Returns a list of all available parameters found in 'dsnnn.n' for subsetting in 
 curl -u [RDAusername]:[RDApassword] -X GET https://rda.ucar.edu/apps/metadata/<dsnnn.n>/-f
 
 Returns a summary of all available parameters (parameters only) found in 'dsnnn.n' for subsetting:
-curl -u [RDAusername]:[RDApassword] -X GET https://rda.ucar.edu/apps/metadata/<dsnnn.n>
+curl -u [RDAusername]:[RDApassword] -X GET https://rda.ucar.edu/apps/paramsummary/<dsnnn.n>
 
 Returns a summary of all available parameters (parameters only) found in 'dsnnn.n' for subsetting in fixed sized columns:
-curl -u [RDAusername]:[RDApassword] -X GET https://rda.ucar.edu/apps/metadata/<dsnnn.n>/-f
+curl -u [RDAusername]:[RDApassword] -X GET https://rda.ucar.edu/apps/paramsummary/<dsnnn.n>/-f
 
 Returns a generic RDA Data subset request control file template:
 This for use with the rdams-client.py tool (see http://rda.ucar.edu/#apps), but can be
