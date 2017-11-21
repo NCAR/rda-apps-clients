@@ -1,7 +1,7 @@
 # `rdams-client` for Python
 
 The `rdams-client` Python utility can be run by registered RDA users to get detailed metadata for RDA data sets, to submit subset requests on select gridded data sets, to check on the processing status of any subset requests, and to download completed request output files to a local system.
-There is a version which supports Python 2.x version found in the `2.x` folder and one which supports Python 3.x version found in the `3.x` folder.
+There is a version which supports Python 2.x version found in the [2.x folder](2.x) and one which supports Python 3.x version found in the [3.x folder](3.x).
 
 ## Installation
 
