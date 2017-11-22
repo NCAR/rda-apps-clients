@@ -4,6 +4,6 @@ param=TMP/RH/UGRD/VGRD/HGT
 level=ISBL:500/700/850/300;SIGL:0.995;HGTL:2/10;SFC:0
 oformat=netCDF
 nlat=72
-slat=-22
+slat=-25
 wlon=-170
 elon=-26
