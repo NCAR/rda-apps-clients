@@ -32,7 +32,6 @@ import sys
 import getpass
 import http.cookiejar
 import json
-import pdb
 
 def update_progress(progress, outdir):
     """Displays or updates a console progress bar
@@ -61,20 +60,32 @@ def update_progress(progress, outdir):
     sys.stdout.flush()
 
 def download_file(remfile, outfile):
-    """download a file from a remote server (remfile) to a local location (outfile)."""
+    """Download a file from a remote server (remfile) to a local location (outfile)."""
     frequest = urllib.request.Request(remfile)
     fresponse = urllib.request.urlopen(remfile)
     with open(outfile, 'wb') as handle:
         handle.write(fresponse.read())
 
+def add_ds_str(ds_num):
+    """Adds 'ds' to ds_num if needed.
+    Throws error if ds number isn't valid.
+    """
+    ds_num = ds_num.strip()
+    if ds_num[0:2] != 'ds':
+        ds_num = 'ds' + ds_num
+    if len(ds_num) != 7:
+        print("'" + ds_num + "' is not valid.")
+        sys.exit()
+    return ds_num
+
 def get_userinfo():
-    """get username and password."""
+    """Get username and password."""
     user = input("Enter your RDA username or email: ")
     pasw = getpass.getpass("Enter your RDA password: ")
     return(user, pasw)
 
 def add_http_auth(url, user, pasw):
-    """add authentication information to opener and return opener."""
+    """Add authentication information to opener and return opener."""
     passman = urllib.request.HTTPPasswordMgrWithDefaultRealm()
     passman.add_password(None, theurl, username, password)
     authhandler = urllib.request.HTTPBasicAuthHandler(passman)
@@ -152,35 +163,35 @@ if len(sys.argv) > 1:
         print('\nGetting summary information.  Please wait as this may take awhile.\n')
         theurl = base + 'summary'
         if len(sys.argv) > 2:
-            theurl = base + 'summary/' + sys.argv[2]
+            theurl = base + 'summary/' + add_ds_str(sys.argv[2])
     elif sys.argv[1] == "-get_metadata":
         print('\nGetting metadata.  Please wait as this may take awhile.\n')
         theurl = base + 'metadata'
         if len(sys.argv) == 3:
-            theurl = base + 'metadata/' + sys.argv[2]
+            theurl = base + 'metadata/' + add_ds_str(sys.argv[2])
         elif len(sys.argv) == 4:
-            theurl = base + 'metadata/' + sys.argv[2] + '/formatted'
+            theurl = base + 'metadata/' + add_ds_str(sys.argv[2]) + '/formatted'
     elif sys.argv[1] == "-get_param_summary":
         print('\nGetting parameter summary.  Please wait as this may take awhile.\n')
         theurl = base + 'paramsummary'
         if len(sys.argv) == 3:
-            theurl = base + 'paramsummary/' + sys.argv[2]
+            theurl = base + 'paramsummary/' + add_ds_str(sys.argv[2])
         elif len(sys.argv) == 4:
-            theurl = base + 'paramsummary/'+sys.argv[2] + '/formatted'
+            theurl = base + 'paramsummary/'+ add_ds_str(sys.argv[2]) + '/formatted'
     elif sys.argv[1] == "-help":
         theurl = base + 'help'
     elif sys.argv[1] == "-get_control_file_template":
         theurl = base + 'template'
         controlfile = './dsnnn.n_control_file'
         if len(sys.argv) > 2:
-            theurl = base + 'template/' + sys.argv[2]
-            controlfile = './' + sys.argv[2] + '_control_file'
+            theurl = base + 'template/' + add_ds_str(sys.argv[2])
+            controlfile = './' + add_ds_str(sys.argv[2]) + '_control_file'
     elif sys.argv[1] == "-get_status":
         theurl = base + 'request'
         if len(sys.argv) == 3:
             theurl = base + 'request/' + sys.argv[2]
         elif len(sys.argv) == 4:
-            theurl = base + 'request/' + sys.argv[2] + '/' + sys.argv[3]
+            theurl = base + 'request/' + sys.argv[2] + '/' + add_ds_str(sys.argv[3])
     elif sys.argv[1] == "-download":
         if len(sys.argv) > 2:
             theurl = base + 'request/' + sys.argv[2] + '/filelist'
