@@ -32,12 +32,15 @@ import sys
 import getpass
 import http.cookiejar
 import json
+import pdb
 
-# update_progress() : Displays or updates a console progress bar
-# Accepts a float between 0 and 1. Any int will be converted to a float.
-# A value under 0 represents a 'halt'.
-# A value at 1 or bigger represents 100%
 def update_progress(progress, outdir):
+    """Displays or updates a console progress bar
+
+    Accepts a float between 0 and 1. Any int will be converted to a float.
+    A value under 0 represents a 'halt'.
+    A value at 1 or bigger represents 100%
+    """
     barLength = 20  # Modify this to change the length of the progress bar
     status = ""
     if isinstance(progress, int):
@@ -57,23 +60,21 @@ def update_progress(progress, outdir):
     sys.stdout.write(text)
     sys.stdout.flush()
 
-# download_file(remfile,outfile) : download a file from a remote server (remfile) to a local location (outfile)
-
-
 def download_file(remfile, outfile):
+    """download a file from a remote server (remfile) to a local location (outfile)."""
     frequest = urllib.request.Request(remfile)
     fresponse = urllib.request.urlopen(remfile)
     with open(outfile, 'wb') as handle:
         handle.write(fresponse.read())
 
-# get_userinfo() : get username and password
 def get_userinfo():
+    """get username and password."""
     user = input("Enter your RDA username or email: ")
     pasw = getpass.getpass("Enter your RDA password: ")
     return(user, pasw)
 
-# add_http_auth(url,user,pasw): add authentication information to opener and return opener
 def add_http_auth(url, user, pasw):
+    """add authentication information to opener and return opener."""
     passman = urllib.request.HTTPPasswordMgrWithDefaultRealm()
     passman.add_password(None, theurl, username, password)
     authhandler = urllib.request.HTTPBasicAuthHandler(passman)
@@ -81,8 +82,8 @@ def add_http_auth(url, user, pasw):
     urllib.request.install_opener(opener)
     return opener
 
-# add_http_cookie(url,authstring): Get and add authentication cookie to http file download handler
 def add_http_cookie(url, authstring):
+    """Get and add authentication cookie to http file download handler."""
     cj = http.cookiejar.MozillaCookieJar(cookie_file)
     openrf = urllib.request.build_opener(
         urllib.request.HTTPCookieProcessor(cj))
@@ -93,21 +94,21 @@ def add_http_cookie(url, authstring):
         urllib.request.HTTPCookieProcessor(cj))
     urllib.request.install_opener(openerf)
 
-# write_pw_file : Write out file with user information
 def write_pw_file(pwfile, username, password):
+    """Write out file with user information."""
     with open(pwfile, "w") as fo:
         npwstring = username + ',' + password
         fo.write(npwstring)
 
-# read_pw_file(pwfile) : Read user information from pw file
 def read_pw_file(pwfile):
+    """Read user information from pw file."""
     with open(pwfile, 'r') as f:
         pwstring = f.read()
         (username, password) = pwstring.split(',', 2)
     return(username, password)
 
-# download_files(filelist,directory): Download multiple files from the rda server and save them to a local directory
 def download_files(filelist, directory):
+    """Download multiple files from the rda server and save them to a local directory."""
     backslash = '/'
     filecount = 0
     percentcomplete = 0
