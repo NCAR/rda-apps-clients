@@ -140,22 +140,141 @@ def download_files(filelist, directory):
         percentcomplete = (float(filecount) / float(length))
     update_progress(percentcomplete, directory)
 
+
 def get_parser():
+    """Creates and returns parser object."""
     description = "Queries NCAR RDA REST API."
     parser = argparse.ArgumentParser(prog='rdams', description=description)
     parser.add_argument('-get_summary', '-g',
             type=str,
-            metavar='dsid',
+            metavar='<dsid>',
             required=False,
             help="Get a summary of the given dataset.")
-    parser.add_argument('-get_metadata', '-gm', type=str, required=False, help="Get metadata for a given dataset")
-    parser.add_argument('-get_param_summary', '-gpm', type=str, required=False, help="Get only parameters for a given dataset")
-    parser.add_argument('-submit', '-s', type=str, required=False, help="Submit a request using a control file")
-    parser.add_argument('-get_status', '-gs', type=str, required=False, help="Get a summary of the given dataset.")
-    parser.add_argument('-download', '-d', type=str, required=False, help="Download data given a request id")
-    parser.add_argument('-globus_download', '-gd', type=str, required=False, help="Start a globus transfer for a give request index.")
-    parser.add_argument('-get_control_file_template', '-gt', type=str, required=False, help="Get a template control file used for subsetting")
+    parser.add_argument('-get_metadata', '-gm',
+            type=str,
+            metavar='<dsid>',
+            required=False,
+            help="Get metadata for a given dataset")
+    parser.add_argument('-get_param_summary', '-gpm',
+            type=str,
+            metavar='<dsid>',
+            required=False,
+            help="Get only parameters for a given dataset")
+    parser.add_argument('-submit', '-s',
+            type=str,
+            metavar='<dsid>',
+            required=False,
+            help="Submit a request using a control file")
+    parser.add_argument('-get_status', '-gs',
+            type=str,
+            metavar='<Control filename>',
+            required=False,
+            help="Get a summary of the given dataset.")
+    parser.add_argument('-download', '-d',
+            type=str,
+            required=False,
+            metavar='<Request Index>',
+            help="Download data given a request id")
+    parser.add_argument('-globus_download', '-gd',
+            type=str,
+            required=False,
+            metavar='<Request Index>',
+            help="Start a globus transfer for a give request index.")
+    parser.add_argument('-get_control_file_template', '-gt',
+            type=str,
+            metavar='<dsid>',
+            required=False,
+            help="Get a template control file used for subsetting")
     return parser
+
+def get_summary(ds):
+    """Returns summary of dataset.
+
+    Args:
+        ds (str): Datset id. e.g. 'ds083.2'
+
+    Returns:
+        dict: JSON decoded result of the query.
+    """
+
+    pass
+
+def get_metadata(ds):
+    """Return metadata of dataset.
+
+    Args:
+        ds (str): Datset id. e.g. 'ds083.2'
+
+    Returns:
+        dict: JSON decoded result of the query.
+    """
+    pass
+
+def get_param_summary(ds):
+    """Return summary of parameters for a dataset.
+
+    Args:
+        ds (str): Datset id. e.g. 'ds083.2'
+
+    Returns:
+        dict: JSON decoded result of the query.
+    """
+    pass
+
+def submit(control_file_name):
+    """Subit a RDA subset or format conversion request.
+
+    Args:
+        control_file_name (str): control file to submit.
+
+    Returns:
+        dict: JSON decoded result of the query.
+    """
+    pass
+
+def get_status(request_idx):
+    """Get status of request.
+
+    Args:
+        request_idx (str): Request Index, typcally a 6-digit int.
+
+    Returns:
+        dict: JSON decoded result of the query.
+    """
+    pass
+
+def download(request_idx):
+    """Return summary of parameters for a dataset.
+
+    Args:
+        ds (str): datset id. e.g. 'ds083.2'
+
+    Returns:
+        dict: JSON decoded result of the query.
+    """
+    pass
+
+def globus_download(request_idx):
+    """Return summary of parameters for a dataset.
+
+    Args:
+        ds (str): datset id. e.g. 'ds083.2'
+
+    Returns:
+        dict: JSON decoded result of the query.
+    """
+    pass
+
+def get_control_file_template(ds):
+    """Return summary of parameters for a dataset.
+
+    Args:
+        ds (str): datset id. e.g. 'ds083.2'
+
+    Returns:
+        dict: JSON decoded result of the query.
+    """
+    pass
 
 def query(args):
     """Perform a query based on command line like arguments.
@@ -165,7 +284,7 @@ def query(args):
         parser.parse_args(['-h'])
         exit(1)
     args = parser.parse_args(args)
-    pdb.set_trace()
+    exit()
 
     sys.tracebacklimit = 0
     base = 'https://rda.ucar.edu/apps/'
