@@ -21,6 +21,7 @@ __author__ = 'Doug Schuster (schuster@ucar.edu), Riley Conroy (rpconroy@ucar.edu
 import pdb
 import sys
 import os
+import requests
 import urllib.request
 import urllib.error
 import urllib.parse
@@ -28,6 +29,11 @@ import getpass
 import http.cookiejar
 import json
 import argparse
+
+
+BASE_URL = 'https://rda.ucar.edu/json_apps/'
+USE_NETRC = False
+DEFAULT_AUTH_FILE = './rdamspw.txt'
 
 def update_progress(progress, outdir):
     """Displays or updates a console progress bar
@@ -75,9 +81,13 @@ def add_ds_str(ds_num):
     return ds_num
 
 def get_userinfo():
-    """Get username and password."""
+    """Get username and password from the command line."""
     user = input("Enter your RDA username or email: ")
     pasw = getpass.getpass("Enter your RDA password: ")
+    try:
+        write_pw_file(user, pasw)
+    except:
+        pass
     return(user, pasw)
 
 def add_http_auth(url, user, pasw):
@@ -89,7 +99,7 @@ def add_http_auth(url, user, pasw):
     urllib.request.install_opener(opener)
     return opener
 
-def add_http_cookie(url, authstring):
+def add_http_cookie(url, authstring, cookie_file='auth.rda_ucar_edu'):
     """Get and add authentication cookie to http file download handler."""
     cj = http.cookiejar.MozillaCookieJar(cookie_file)
     openrf = urllib.request.build_opener(
@@ -101,7 +111,7 @@ def add_http_cookie(url, authstring):
         urllib.request.HTTPCookieProcessor(cj))
     urllib.request.install_opener(openerf)
 
-def write_pw_file(pwfile, username, password):
+def write_pw_file(username, password, pwfile=DEFAULT_AUTH_FILE):
     """Write out file with user information."""
     with open(pwfile, "w") as fo:
         npwstring = username + ',' + password
@@ -145,47 +155,78 @@ def get_parser():
     """Creates and returns parser object."""
     description = "Queries NCAR RDA REST API."
     parser = argparse.ArgumentParser(prog='rdams', description=description)
-    parser.add_argument('-get_summary', '-g',
+    parser.add_argument('-print', '-p',
+            action='store_true',
+            required=False,
+            help="Print result of queries")
+    parser.add_argument('-use_netrc', '-un',
+            action='store_true',
+            required=False,
+            help="Use your .netrc file for authentication")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('-get_summary', '-g',
             type=str,
             metavar='<dsid>',
             required=False,
             help="Get a summary of the given dataset.")
-    parser.add_argument('-get_metadata', '-gm',
+    group.add_argument('-get_metadata', '-gm',
             type=str,
             metavar='<dsid>',
             required=False,
             help="Get metadata for a given dataset")
-    parser.add_argument('-get_param_summary', '-gpm',
+    group.add_argument('-get_param_summary', '-gpm',
             type=str,
             metavar='<dsid>',
             required=False,
             help="Get only parameters for a given dataset")
-    parser.add_argument('-submit', '-s',
+    group.add_argument('-submit', '-s',
             type=str,
             metavar='<dsid>',
             required=False,
             help="Submit a request using a control file")
-    parser.add_argument('-get_status', '-gs',
+    group.add_argument('-get_status', '-gs',
             type=str,
-            metavar='<Control filename>',
+            nargs='?',
+            default='ALL',
+            metavar='<Request Index>',
             required=False,
             help="Get a summary of the given dataset.")
-    parser.add_argument('-download', '-d',
+    group.add_argument('-download', '-d',
             type=str,
             required=False,
             metavar='<Request Index>',
             help="Download data given a request id")
-    parser.add_argument('-globus_download', '-gd',
+    group.add_argument('-globus_download', '-gd',
             type=str,
             required=False,
             metavar='<Request Index>',
             help="Start a globus transfer for a give request index.")
-    parser.add_argument('-get_control_file_template', '-gt',
+    group.add_argument('-get_control_file_template', '-gt',
             type=str,
             metavar='<dsid>',
             required=False,
             help="Get a template control file used for subsetting")
     return parser
+
+def check_status(ret):
+    """Checks that status of return object."""
+    if ret.status_code == 401:
+        print(ret.content)
+        exit(1)
+
+def get_authentication(pwfile=DEFAULT_AUTH_FILE):
+    """Attempts to get authentication.
+
+    Returns:
+        (tuple): username, passord
+        (None): If using .netrc file
+    """
+    if USE_NETRC:
+        return None
+    if os.path.isfile(pwfile) and os.path.getsize(pwfile) > 0:
+        return read_pw_file(pwfile)
+    else:
+        return get_userinfo()
 
 def get_summary(ds):
     """Returns summary of dataset.
@@ -196,8 +237,14 @@ def get_summary(ds):
     Returns:
         dict: JSON decoded result of the query.
     """
+    url = BASE_URL + 'summary/'
+    url += ds
 
-    pass
+    user_auth = get_authentication()
+    ret = requests.get(url, auth=user_auth)
+
+    check_status(ret)
+    return ret.json()
 
 def get_metadata(ds):
     """Return metadata of dataset.
@@ -232,11 +279,12 @@ def submit(control_file_name):
     """
     pass
 
-def get_status(request_idx):
+def get_status(request_idx=None):
     """Get status of request.
+    If request_ix not provided, get all open requests
 
     Args:
-        request_idx (str): Request Index, typcally a 6-digit int.
+        request_idx (str, Optional): Request Index, typcally a 6-digit integer.
 
     Returns:
         dict: JSON decoded result of the query.
@@ -244,10 +292,10 @@ def get_status(request_idx):
     pass
 
 def download(request_idx):
-    """Return summary of parameters for a dataset.
+    """Download files from request Index
 
     Args:
-        ds (str): datset id. e.g. 'ds083.2'
+        request_idx (str): Request Index, typically a 6-digit integer.
 
     Returns:
         dict: JSON decoded result of the query.
@@ -255,10 +303,10 @@ def download(request_idx):
     pass
 
 def globus_download(request_idx):
-    """Return summary of parameters for a dataset.
+    """Begin a globus transfer.
 
     Args:
-        ds (str): datset id. e.g. 'ds083.2'
+        request_ix (str): Request Index, typically a 6-digit integer.
 
     Returns:
         dict: JSON decoded result of the query.
@@ -266,7 +314,7 @@ def globus_download(request_idx):
     pass
 
 def get_control_file_template(ds):
-    """Return summary of parameters for a dataset.
+    """Write a control file for use in subset requests.
 
     Args:
         ds (str): datset id. e.g. 'ds083.2'
@@ -276,27 +324,76 @@ def get_control_file_template(ds):
     """
     pass
 
+def write_control_file_template(ds, write_location=None):
+    """Write a control file for use in subset requests.
+
+    Args:
+        ds (str): datset id. e.g. 'ds083.2'
+        write_location (str, Optional): Directory in which to write.
+                Defaults to working directory
+
+    Returns:
+        None
+    """
+    pass
+
+def get_selected_function(args_dict):
+    """Returns correct function based on options.
+    Args:
+        options (dict) : Command with options.
+
+    Returns:
+        (function): function that the options specified
+    """
+    action_map = {
+            'get_summary' : get_summary,
+            'get_metadata' : get_metadata,
+            'get_param_summary' : get_param_summary,
+            'submit' : submit,
+            'get_status' : get_status,
+            'download' : download,
+            'globus_download' : globus_download,
+            'get_control_file_template' : write_control_file_template
+            }
+    for opt,value in args_dict.items():
+        if opt in action_map and value is not None:
+            return (action_map[opt], value)
+
 def query(args):
     """Perform a query based on command line like arguments.
+
+    Args:
+        args (list): argument list of querying commands.
+
+    Returns:
+        (dict): Output of json decoded API query.
+
+    Example:
+        ```
+        >>> query(['-get_status', '123456']
+        ```
     """
     parser = get_parser()
-    if len(args) == 1:
-        parser.parse_args(['-h'])
-        exit(1)
     args = parser.parse_args(args)
+    if args.use_netrc:
+        USE_NETRC = True
+    args_dict = args.__dict__
+    func,params = get_selected_function(args_dict)
+    result = func(params)
+    if args.print:
+        print(json.dumps(result, indent=3))
+    return result
+
     exit()
 
     sys.tracebacklimit = 0
-    base = 'https://rda.ucar.edu/apps/'
     jsondata = ''
     username = ''
     password = ''
-    pwfile = './rdamspw.txt'
     pwstring = ''
     npwstring = ''
     controlfile = ''
     controlparms = {}
-    cookie_file = 'auth.rda_ucar_edu'
     loginurl = 'https://rda.ucar.edu/cgi-bin/login'
     exitstring = "\nUsage: \nrdams-client.py -get_summary <dsnnn.n>\nrdams-client.py -get_metadata <dsnnn.n>\nrdams-client.py -get_param_summary <dsnnn.n>\nrdams-client.py -submit [control_file_name]\nrdams-client.py -get_status <RequestIndex> <-proc_status>\nrdams-client.py -download [RequestIndex]\nrdams-client.py -globus_download [RequestIndex]\nrdams-client.py -purge [RequestIndex]\nrdams-client.py -get_control_file_template <dsnnn.n>\nrdams-client.py -help\n\n"
 
@@ -442,4 +539,4 @@ def query(args):
 
 if __name__ == "__main__":
     """Calls Generic main method"""
-    query(sys.argv)
+    query(sys.argv[1:])
