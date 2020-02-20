@@ -31,7 +31,7 @@ import json
 import argparse
 
 
-BASE_URL = 'https://rda.ucar.edu/json_apps/'
+BASE_URL = 'https://rda-web-dev.ucar.edu/json_apps/'
 USE_NETRC = False
 DEFAULT_AUTH_FILE = './rdamspw.txt'
 
@@ -124,21 +124,30 @@ def read_pw_file(pwfile):
         (username, password) = pwstring.split(',', 2)
     return(username, password)
 
-def download_files(filelist, directory):
-    """Download multiple files from the rda server and save them to a local directory."""
+def download_files(filelist, out_dir):
+    """Download files in a list.
+
+    Args:
+        filelist (list): List of web files to download.
+        out_dir (str): directory to put downloaded files
+
+    Returns:
+        None
+    """
     backslash = '/'
     filecount = 0
     percentcomplete = 0
     localsize = ''
     length = 0
     length = len(filelist)
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-    for key, value in filelist.items():
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
+    for file_dict in filelist:
+        web_file = file_dict['web_path']
         downloadpath, localfile = key.rsplit("/", 1)
-        outpath = directory + backslash + localfile
+        outpath = out_dir + backslash + localfile
         percentcomplete = (float(filecount) / float(length))
-        update_progress(percentcomplete, directory)
+        update_progress(percentcomplete, out_dir)
         if os.path.isfile(outpath):
             localsize = os.path.getsize(outpath)
             if(str(localsize) != value):
@@ -236,13 +245,60 @@ def get_parser():
     return parser
 
 def check_status(ret):
-    """Checks that status of return object."""
+    """Checks that status of return object.
+
+    Exits if a 401 status code.
+
+    Args:
+        (response.Response): Response of a request.
+
+    Returns:
+        None
+    """
     if ret.status_code == 401:
         print(ret.content)
         exit(1)
 
+def check_file_status(filepath, filesize):
+    sys.stdout.write('\r')
+    sys.stdout.flush()
+    size = int(os.stat(filepath).st_size)
+    percent_complete = (size/filesize)*100
+    sys.stdout.write('%.3f %s' % (percent_complete, '% Completed'))
+    sys.stdout.flush()
+
+def download_files(filelist, out_dir='./', cookie_file=None):
+    """Download files in a list.
+
+    Args:
+        filelist (list): List of web files to download.
+        out_dir (str): directory to put downloaded files
+
+    Returns:
+        None
+    """
+    if cookie_file is None:
+        cookies = get_cookies()
+    for _file in filelist:
+        file_base = os.path.basename(_file)
+        out_file = out_dir + file_base
+        print('Downloading',file_base)
+        req = requests.get(filename, cookies=cookies, allow_redirects=True, stream=True)
+        filesize = int(req.headers['Content-length'])
+        with open(out_file, 'wb') as outfile:
+            chunk_size=1048576
+            for chunk in req.iter_content(chunk_size=chunk_size):
+                outfile.write(chunk)
+                if chunk_size < filesize:
+                    check_file_status(out_file, filesize)
+        check_file_status(out_file, filesize)
+        print()
+
 def get_authentication(pwfile=DEFAULT_AUTH_FILE):
     """Attempts to get authentication.
+
+    Args:
+        pwfile (str): location of password file.
 
     Returns:
         (tuple): username, passord
@@ -254,6 +310,32 @@ def get_authentication(pwfile=DEFAULT_AUTH_FILE):
         return read_pw_file(pwfile)
     else:
         return get_userinfo()
+
+def get_cookies(username=None, password=None):
+    """Authenticates with RDA and returns authentication cookies.
+
+    The user must authenticate with
+    authentication cookies per RDA policy.
+
+    Args:
+        username (str): RDA username. Typically the user's email.
+        password (str): RDA password.
+
+    Returns:
+        requests.cookies.RequestsCookieJar: Login request's cookies.
+    """
+    if username is None and password is None:
+        username,password = get_authentication()
+
+    login_url = "https://rda.ucar.edu/cgi-bin/login"
+    values = {'email' : username, 'passwd' : password, 'action' : 'login'}
+    ret = requests.post(login_url, data=values)
+    if ret.status_code != 200:
+        print('Bad Authentication')
+        print(ret.text)
+        exit(1)
+    return ret.cookies
+
 
 def get_summary(ds):
     """Returns summary of dataset.
@@ -369,8 +451,8 @@ def get_status(request_idx=None):
     check_status(ret)
     return ret.json()
 
-def download(request_idx):
-    """Download files from request Index
+def get_filelist(request_idx):
+    """Gets filelist for request
 
     Args:
         request_idx (str): Request Index, typically a 6-digit integer.
@@ -379,14 +461,35 @@ def download(request_idx):
         dict: JSON decoded result of the query.
     """
     url = BASE_URL + 'request/'
-    url += request_idx
-    url += 'filelist'
+    url += str(request_idx)
+    url += '/filelist_json'
 
     user_auth = get_authentication()
     ret = requests.get(url, auth=user_auth)
 
     check_status(ret)
+
     return ret.json()
+
+
+def download(request_index):
+    """Download files given request Index
+
+    Args:
+        request_idx (str): Request Index, typically a 6-digit integer.
+
+    Returns:
+        None
+    """
+    ret = get_filelist(request_idx)
+    filelist = ret['result']['web_files']
+
+    user_auth = get_authentication()
+
+    username, password = user_auth
+    cookies = get_cookies(username,password)
+
+    download_files(filelist)
 
 def globus_download(request_idx):
     """Begin a globus transfer.
@@ -474,6 +577,7 @@ def get_selected_function(args_dict):
     Returns:
         (function): function that the options specified
     """
+    # Maps an argument to function call
     action_map = {
             'get_summary' : get_summary,
             'get_metadata' : get_metadata,
@@ -512,163 +616,10 @@ def query(args):
     args_dict = args.__dict__
     func,params = get_selected_function(args_dict)
     result = func(params)
-    if args.print:
+    if not args.noprint:
         print(json.dumps(result, indent=3))
     return result
 
-    exit()
-
-    sys.tracebacklimit = 0
-    jsondata = ''
-    username = ''
-    password = ''
-    pwstring = ''
-    npwstring = ''
-    controlfile = ''
-    controlparms = {}
-    loginurl = 'https://rda.ucar.edu/cgi-bin/login'
-    exitstring = "\nUsage: \nrdams-client.py -get_summary <dsnnn.n>\nrdams-client.py -get_metadata <dsnnn.n>\nrdams-client.py -get_param_summary <dsnnn.n>\nrdams-client.py -submit [control_file_name]\nrdams-client.py -get_status <RequestIndex> <-proc_status>\nrdams-client.py -download [RequestIndex]\nrdams-client.py -globus_download [RequestIndex]\nrdams-client.py -purge [RequestIndex]\nrdams-client.py -get_control_file_template <dsnnn.n>\nrdams-client.py -help\n\n"
-
-    if len(sys.argv) > 1:
-        if sys.argv[1] == "-get_summary":
-            print('\nGetting summary information.  Please wait as this may take awhile.\n')
-            theurl = base + 'summary'
-            if len(sys.argv) > 2:
-                theurl = base + 'summary/' + add_ds_str(sys.argv[2])
-        elif sys.argv[1] == "-get_metadata":
-            print('\nGetting metadata.  Please wait as this may take awhile.\n')
-            theurl = base + 'metadata'
-            if len(sys.argv) == 3:
-                theurl = base + 'metadata/' + add_ds_str(sys.argv[2])
-            elif len(sys.argv) == 4:
-                theurl = base + 'metadata/' + add_ds_str(sys.argv[2]) + '/formatted'
-        elif sys.argv[1] == "-get_param_summary":
-            print('\nGetting parameter summary.  Please wait as this may take awhile.\n')
-            theurl = base + 'paramsummary'
-            if len(sys.argv) == 3:
-                theurl = base + 'paramsummary/' + add_ds_str(sys.argv[2])
-            elif len(sys.argv) == 4:
-                theurl = base + 'paramsummary/'+ add_ds_str(sys.argv[2]) + '/formatted'
-        elif sys.argv[1] == "-help":
-            theurl = base + 'help'
-        elif sys.argv[1] == "-get_control_file_template":
-            theurl = base + 'template'
-            controlfile = './dsnnn.n_control_file'
-            if len(sys.argv) > 2:
-                theurl = base + 'template/' + add_ds_str(sys.argv[2])
-                controlfile = './' + add_ds_str(sys.argv[2]) + '_control_file'
-        elif sys.argv[1] == "-get_status":
-            theurl = base + 'request'
-            if len(sys.argv) == 3:
-                theurl = base + 'request/' + sys.argv[2]
-            elif len(sys.argv) == 4:
-                theurl = base + 'request/' + sys.argv[2] + '/' + add_ds_str(sys.argv[3])
-        elif sys.argv[1] == "-download":
-            if len(sys.argv) > 2:
-                theurl = base + 'request/' + sys.argv[2] + '/filelist'
-            else:
-                sys.exit("\nUsage: \nrdams-client.py -download [RequestIndex]\n")
-        elif sys.argv[1] == "-globus_download":
-            if len(sys.argv) > 2:
-                theurl = base+'request/' + sys.argv[2] + '/-globus_download'
-            else:
-                sys.exit("\nUsage: \nrdams-client.py -globus_download [RequestIndex]\n")
-        elif sys.argv[1] == "-purge":
-            if len(sys.argv) > 2:
-                theurl = base + 'request/' + sys.argv[2]
-            else:
-                sys.exit("\nUsage: \nrdams-client.py -purge [RequestIndex]\n")
-        elif sys.argv[1] == "-submit":
-            if len(sys.argv) > 2:
-                theurl = base + 'request'
-                with open(sys.argv[2], "r") as myfile:
-                    for line in myfile:
-                        if line.startswith('#'):
-                            continue
-                        li = line.rstrip()
-                        (key, value) = li.split('=', 2)
-                        controlparms[key] = value
-                jsondata = '{'
-                for k in list(controlparms.keys()):
-                    jsondata += '"' + k + '"' + ":" + '"' + controlparms[k] + '",'
-                jsondata = jsondata[:-1]
-                jsondata += '}'
-                print('\nSubmitting request.  Please wait as this may take awhile.\n')
-            else:
-                sys.exit(
-                    "\nUsage: \nrdams-clientpy -submit [control_file_name]\n")
-        else:
-            sys.exit(exitstring)
-    else:
-        sys.exit(exitstring)
-
-
-    if os.path.isfile(pwfile) and os.path.getsize(pwfile) > 0:
-        (username, password) = read_pw_file(pwfile)
-    else:
-        (username, password) = get_userinfo()
-    opener = add_http_auth(theurl, username, password)
-
-    if len(jsondata) > 1:
-        request = urllib.request.Request(
-            theurl, jsondata.encode(), {'Content-type': 'application/json'})
-    else:
-        request = urllib.request.Request(theurl)
-
-    if sys.argv[1] == "-purge":
-        request.get_method = lambda: 'DELETE'
-
-    try:
-        url = opener.open(request)
-    except urllib.error.HTTPError as e:
-        if e.code == 401:
-            print('RDA username and password invalid.  Please try again\n')
-            (username, password) = get_userinfo()
-            opener = add_http_auth(theurl, username, password)
-            try:
-                url = opener.open(request)
-            except urllib.error.HTTPError as e:
-                if e.code == 401:
-                    print(
-                        'RDA username and password invalid, or you are not authorized to access this dataset.\n')
-                    print('Please verify your login information at http://rda.ucar.edu\n.')
-                    sys.exit()
-
-
-    write_pw_file(pwfile, username, password)
-
-
-    if sys.argv[1] == "-get_control_file_template":
-        print('\nWriting example control file to ' + controlfile + '\n')
-        with open(controlfile, "wb") as fo:
-            fo.write(url.read())
-        sys.exit()
-    if sys.argv[1] == "-download":
-        authdata = 'email=' + username + '&password=' + password + '&action=login'
-        authdata = authdata.encode()
-
-        jsonfilelist = url.read().decode()
-
-        if jsonfilelist[0] != "{":
-            print(jsonfilelist)
-            sys.exit()
-
-        filelist = json.loads(jsonfilelist)
-        length = len(filelist)
-
-        directory = 'rda_request_' + sys.argv[2]
-
-        # get cookie required to download data files
-        add_http_cookie(loginurl, authdata)
-
-        print("\n\nStarting Download.\n\n")
-
-        download_files(filelist, directory)
-
-        sys.exit()
-
-    print(url.read().decode())
-
 if __name__ == "__main__":
-    """Calls Generic main method"""
+    """Calls main method"""
     query(sys.argv[1:])
