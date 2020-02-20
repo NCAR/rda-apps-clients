@@ -124,40 +124,40 @@ def read_pw_file(pwfile):
         (username, password) = pwstring.split(',', 2)
     return(username, password)
 
-def download_files(filelist, out_dir):
-    """Download files in a list.
-
-    Args:
-        filelist (list): List of web files to download.
-        out_dir (str): directory to put downloaded files
-
-    Returns:
-        None
-    """
-    backslash = '/'
-    filecount = 0
-    percentcomplete = 0
-    localsize = ''
-    length = 0
-    length = len(filelist)
-    if not os.path.exists(out_dir):
-        os.makedirs(out_dir)
-    for file_dict in filelist:
-        web_file = file_dict['web_path']
-        downloadpath, localfile = key.rsplit("/", 1)
-        outpath = out_dir + backslash + localfile
-        percentcomplete = (float(filecount) / float(length))
-        update_progress(percentcomplete, out_dir)
-        if os.path.isfile(outpath):
-            localsize = os.path.getsize(outpath)
-            if(str(localsize) != value):
-                download_file(key, outpath)
-        elif(not os.path.isfile(outpath)):
-            download_file(key, outpath)
-
-        filecount = filecount + 1
-        percentcomplete = (float(filecount) / float(length))
-    update_progress(percentcomplete, directory)
+#def download_files(filelist, out_dir):
+#    """Download files in a list.
+#
+#    Args:
+#        filelist (list): List of web files to download.
+#        out_dir (str): directory to put downloaded files
+#
+#    Returns:
+#        None
+#    """
+#    backslash = '/'
+#    filecount = 0
+#    percentcomplete = 0
+#    localsize = ''
+#    length = 0
+#    length = len(filelist)
+#    if not os.path.exists(out_dir):
+#        os.makedirs(out_dir)
+#    for file_dict in filelist:
+#        web_file = file_dict['web_path']
+#        downloadpath, localfile = key.rsplit("/", 1)
+#        outpath = out_dir + backslash + localfile
+#        percentcomplete = (float(filecount) / float(length))
+#        update_progress(percentcomplete, out_dir)
+#        if os.path.isfile(outpath):
+#            localsize = os.path.getsize(outpath)
+#            if(str(localsize) != value):
+#                download_file(key, outpath)
+#        elif(not os.path.isfile(outpath)):
+#            download_file(key, outpath)
+#
+#        filecount = filecount + 1
+#        percentcomplete = (float(filecount) / float(length))
+#    update_progress(percentcomplete, directory)
 
 def read_control_file(control_file):
     """Reads control file, and return python dict.
@@ -189,7 +189,7 @@ def get_parser():
     parser.add_argument('-noprint', '-np',
             action='store_true',
             required=False,
-            help="Print result of queries.")
+            help="Do not print result of queries.")
     parser.add_argument('-use_netrc', '-un',
             action='store_true',
             required=False,
@@ -218,7 +218,7 @@ def get_parser():
     group.add_argument('-get_status', '-gs',
             type=str,
             nargs='?',
-            default='ALL',
+            const='ALL',
             metavar='<Request Index>',
             required=False,
             help="Get a summary of the given dataset.")
@@ -283,7 +283,7 @@ def download_files(filelist, out_dir='./', cookie_file=None):
         file_base = os.path.basename(_file)
         out_file = out_dir + file_base
         print('Downloading',file_base)
-        req = requests.get(filename, cookies=cookies, allow_redirects=True, stream=True)
+        req = requests.get(_file, cookies=cookies, allow_redirects=True, stream=True)
         filesize = int(req.headers['Content-length'])
         with open(out_file, 'wb') as outfile:
             chunk_size=1048576
@@ -472,7 +472,7 @@ def get_filelist(request_idx):
     return ret.json()
 
 
-def download(request_index):
+def download(request_idx):
     """Download files given request Index
 
     Args:
@@ -482,6 +482,9 @@ def download(request_index):
         None
     """
     ret = get_filelist(request_idx)
+    if ret['status'] != 'ok':
+        return ret
+
     filelist = ret['result']['web_files']
 
     user_auth = get_authentication()
@@ -489,7 +492,10 @@ def download(request_index):
     username, password = user_auth
     cookies = get_cookies(username,password)
 
-    download_files(filelist)
+    web_files = list(map(lambda x: x['web_path'], filelist))
+
+    download_files(web_files)
+    return ret
 
 def globus_download(request_idx):
     """Begin a globus transfer.
