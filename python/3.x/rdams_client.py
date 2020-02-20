@@ -35,38 +35,6 @@ BASE_URL = 'https://rda-web-dev.ucar.edu/json_apps/'
 USE_NETRC = False
 DEFAULT_AUTH_FILE = './rdamspw.txt'
 
-def update_progress(progress, outdir):
-    """Displays or updates a console progress bar
-
-    Accepts a float between 0 and 1. Any int will be converted to a float.
-    A value under 0 represents a 'halt'.
-    A value at 1 or bigger represents 100%
-    """
-    barLength = 20  # Modify this to change the length of the progress bar
-    status = ""
-    if isinstance(progress, int):
-        progress = float(progress)
-    if not isinstance(progress, float):
-        progress = 0
-        status = "error: progress var must be float\r\n\n"
-    if progress < 0:
-        progress = 0
-        status = "Halt...\r\n\n"
-    if progress >= 1:
-        progress = 1
-        status = "Done...\r\n\n"
-    block = int(round(barLength * progress))
-    text = "\rDownloading Request to './{0}' directory.  Download Progress: [{1}] {2}% {3}".format(
-        outdir, "=" * block + " " * (barLength - block), progress * 100, status)
-    sys.stdout.write(text)
-    sys.stdout.flush()
-
-def download_file(remfile, outfile):
-    """Download a file from a remote server (remfile) to a local location (outfile)."""
-    frequest = urllib.request.Request(remfile)
-    fresponse = urllib.request.urlopen(remfile)
-    with open(outfile, 'wb') as handle:
-        handle.write(fresponse.read())
 
 def add_ds_str(ds_num):
     """Adds 'ds' to ds_num if needed.
@@ -90,27 +58,6 @@ def get_userinfo():
         pass
     return(user, pasw)
 
-def add_http_auth(url, user, pasw):
-    """Add authentication information to opener and return opener."""
-    passman = urllib.request.HTTPPasswordMgrWithDefaultRealm()
-    passman.add_password(None, theurl, username, password)
-    authhandler = urllib.request.HTTPBasicAuthHandler(passman)
-    opener = urllib.request.build_opener(authhandler)
-    urllib.request.install_opener(opener)
-    return opener
-
-def add_http_cookie(url, authstring, cookie_file='auth.rda_ucar_edu'):
-    """Get and add authentication cookie to http file download handler."""
-    cj = http.cookiejar.MozillaCookieJar(cookie_file)
-    openrf = urllib.request.build_opener(
-        urllib.request.HTTPCookieProcessor(cj))
-    frequest = urllib.request.Request(url, authstring)
-    cj.add_cookie_header(frequest)
-    response = openrf.open(frequest)
-    openerf = urllib.request.build_opener(
-        urllib.request.HTTPCookieProcessor(cj))
-    urllib.request.install_opener(openerf)
-
 def write_pw_file(username, password, pwfile=DEFAULT_AUTH_FILE):
     """Write out file with user information."""
     with open(pwfile, "w") as fo:
@@ -118,46 +65,19 @@ def write_pw_file(username, password, pwfile=DEFAULT_AUTH_FILE):
         fo.write(npwstring)
 
 def read_pw_file(pwfile):
-    """Read user information from pw file."""
+    """Read user information from pw file.
+
+    Args:
+        pwfile (str): location of password file.
+
+    Returns:
+        (tuple): (username,password)
+    """
     with open(pwfile, 'r') as f:
         pwstring = f.read()
         (username, password) = pwstring.split(',', 2)
     return(username, password)
 
-#def download_files(filelist, out_dir):
-#    """Download files in a list.
-#
-#    Args:
-#        filelist (list): List of web files to download.
-#        out_dir (str): directory to put downloaded files
-#
-#    Returns:
-#        None
-#    """
-#    backslash = '/'
-#    filecount = 0
-#    percentcomplete = 0
-#    localsize = ''
-#    length = 0
-#    length = len(filelist)
-#    if not os.path.exists(out_dir):
-#        os.makedirs(out_dir)
-#    for file_dict in filelist:
-#        web_file = file_dict['web_path']
-#        downloadpath, localfile = key.rsplit("/", 1)
-#        outpath = out_dir + backslash + localfile
-#        percentcomplete = (float(filecount) / float(length))
-#        update_progress(percentcomplete, out_dir)
-#        if os.path.isfile(outpath):
-#            localsize = os.path.getsize(outpath)
-#            if(str(localsize) != value):
-#                download_file(key, outpath)
-#        elif(not os.path.isfile(outpath)):
-#            download_file(key, outpath)
-#
-#        filecount = filecount + 1
-#        percentcomplete = (float(filecount) / float(length))
-#    update_progress(percentcomplete, directory)
 
 def read_control_file(control_file):
     """Reads control file, and return python dict.
@@ -250,7 +170,7 @@ def check_status(ret):
     Exits if a 401 status code.
 
     Args:
-        (response.Response): Response of a request.
+        ret (response.Response): Response of a request.
 
     Returns:
         None
@@ -260,6 +180,15 @@ def check_status(ret):
         exit(1)
 
 def check_file_status(filepath, filesize):
+    """Prints file download status as percent of file complete.
+
+    Args:
+        filepath (str): File being downloaded.
+        filesize (int): Expected total size of file in bytes.
+
+    Returns:
+        None
+    """
     sys.stdout.write('\r')
     sys.stdout.flush()
     size = int(os.stat(filepath).st_size)
