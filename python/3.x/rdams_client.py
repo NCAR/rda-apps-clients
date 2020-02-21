@@ -22,11 +22,7 @@ import pdb
 import sys
 import os
 import requests
-import urllib.request
-import urllib.error
-import urllib.parse
 import getpass
-import http.cookiejar
 import json
 import argparse
 
@@ -35,6 +31,35 @@ BASE_URL = 'https://rda-web-dev.ucar.edu/json_apps/'
 USE_NETRC = False
 DEFAULT_AUTH_FILE = './rdamspw.txt'
 
+
+def query(args):
+    """Perform a query based on command line like arguments.
+
+    Args:
+        args (list): argument list of querying commands.
+
+    Returns:
+        (dict): Output of json decoded API query.
+
+    Example:
+        ```
+        >>> query(['-get_status', '123456'])
+
+        >>> query(['-get_metadata', 'ds083.2'])
+        ```
+    """
+    parser = get_parser()
+    if len(args) == 0:
+        parser.parse_args(['-h'])
+    args = parser.parse_args(args)
+    if args.use_netrc:
+        USE_NETRC = True
+    args_dict = args.__dict__
+    func,params = get_selected_function(args_dict)
+    result = func(params)
+    if not args.noprint:
+        print(json.dumps(result, indent=3))
+    return result
 
 def add_ds_str(ds_num):
     """Adds 'ds' to ds_num if needed.
@@ -461,10 +486,9 @@ def get_control_file_template(ds):
     ret = requests.get(url, auth=user_auth)
 
     check_status(ret)
-    control_str = ret.content.decode("utf-8")
     return ret.json()
 
-def write_control_file_template(ds, write_location=None):
+def write_control_file_template(ds, write_location='./'):
     """Write a control file for use in subset requests.
 
     Args:
@@ -473,16 +497,19 @@ def write_control_file_template(ds, write_location=None):
                 Defaults to working directory
 
     Returns:
-        None
+        dict: JSON decoded result of the query.
     """
-    url = BASE_URL + 'template/'
-    url += ds
+    _json = get_control_file_template(ds)
+    control_str = _json['result']['template']
 
-    user_auth = get_authentication()
-    ret = requests.get(url, auth=user_auth)
+    template_filename = write_location + add_ds_str(ds) + '_control.ctl'
+    if os.path.exists(template_filename):
+        print(template_filename + " already exists.\nExiting")
+        exit(1)
+    with open(template_filename, 'w') as fh:
+        fh.write(control_str)
 
-    check_status(ret)
-    return ret.json()
+    return _json
 
 def purge_request(request_idx):
     """Write a control file for use in subset requests.
@@ -528,32 +555,6 @@ def get_selected_function(args_dict):
         if opt in action_map and value is not None:
             return (action_map[opt], value)
 
-def query(args):
-    """Perform a query based on command line like arguments.
-
-    Args:
-        args (list): argument list of querying commands.
-
-    Returns:
-        (dict): Output of json decoded API query.
-
-    Example:
-        ```
-        >>> query(['-get_status', '123456']
-        ```
-    """
-    parser = get_parser()
-    if len(args) == 0:
-        parser.parse_args(['-h'])
-    args = parser.parse_args(args)
-    if args.use_netrc:
-        USE_NETRC = True
-    args_dict = args.__dict__
-    func,params = get_selected_function(args_dict)
-    result = func(params)
-    if not args.noprint:
-        print(json.dumps(result, indent=3))
-    return result
 
 if __name__ == "__main__":
     """Calls main method"""
