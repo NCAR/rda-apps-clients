@@ -32,7 +32,7 @@ USE_NETRC = False
 DEFAULT_AUTH_FILE = './rdamspw.txt'
 
 
-def query(args):
+def query(args=None):
     """Perform a query based on command line like arguments.
 
     Args:
@@ -49,7 +49,7 @@ def query(args):
         ```
     """
     parser = get_parser()
-    if len(args) == 0:
+    if args is None or len(args) == 0:
         parser.parse_args(['-h'])
     args = parser.parse_args(args)
     if args.use_netrc:
@@ -189,19 +189,22 @@ def get_parser():
             help="Purge a request.")
     return parser
 
-def check_status(ret):
+def check_status(ret, pwfile=DEFAULT_AUTH_FILE):
     """Checks that status of return object.
 
     Exits if a 401 status code.
 
     Args:
         ret (response.Response): Response of a request.
+        pwfile (str) : password file. Will remove if auth incorrect
 
     Returns:
         None
     """
-    if ret.status_code == 401:
+    if ret.status_code == 401: # Not Authorized
         print(ret.content)
+        if not USE_NETRC:
+            os.remove(pwfile)
         exit(1)
 
 def check_file_status(filepath, filesize):
