@@ -109,18 +109,28 @@ def read_control_file(control_file):
 
     Args:
         control_file (str): Location of control file to parse.
+                Or control file string.
 
     Returns:
         (dict) python dict representing control file.
     """
     control_params = {}
-    with open(control_file, "r") as myfile:
-        for line in myfile:
-            if line.startswith('#'):
-                continue
-            li = line.rstrip()
-            (key, value) = li.split('=', 2)
-            control_params[key] = value
+    if os.path.exists(control_file):
+        myfile = open(control_file, 'r')
+    else:
+        myfile = control_file.split('\n')
+
+    for line in myfile:
+        line = line.strip()
+        if line.startswith('#') or line == "":
+            continue
+        li = line.rstrip()
+        (key, value) = li.split('=', 2)
+        control_params[key] = value
+    try:
+        myfile.close()
+    except:
+        pass
     return control_params
 
 def get_parser():
