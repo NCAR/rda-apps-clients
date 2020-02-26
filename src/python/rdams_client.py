@@ -27,7 +27,7 @@ import json
 import argparse
 
 
-BASE_URL = 'https://rda-web-dev.ucar.edu/json_apps/'
+BASE_URL = 'https://rda.ucar.edu/json_apps/'
 USE_NETRC = False
 DEFAULT_AUTH_FILE = './rdamspw.txt'
 
