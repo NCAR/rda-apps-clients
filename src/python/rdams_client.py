@@ -381,6 +381,7 @@ def submit_json(json_file):
 
     user_auth = get_authentication()
     ret = requests.post(url, data=control_dict, auth=user_auth)
+    pdb.set_trace()
 
     check_status(ret)
     return ret.json()
@@ -409,8 +410,11 @@ def get_status(request_idx=None):
     Returns:
         dict: JSON decoded result of the query.
     """
+    if request_idx is None:
+        request_idx = 'ALL'
     url = BASE_URL + 'request/'
-    url += request_idx
+    url += str(request_idx)
+
 
     user_auth = get_authentication()
     ret = requests.get(url, auth=user_auth)
