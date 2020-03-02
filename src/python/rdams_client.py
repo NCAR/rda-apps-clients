@@ -381,7 +381,6 @@ def submit_json(json_file):
 
     user_auth = get_authentication()
     ret = requests.post(url, data=control_dict, auth=user_auth)
-    pdb.set_trace()
 
     check_status(ret)
     return ret.json()
