@@ -16,6 +16,7 @@
 - [HTTPS DELETE Commands and Responses](#https-delete)
   + [Purge Request](#Purge)
 
+------
 
 ### General Info
 
@@ -32,22 +33,25 @@
   + If `status` is `ok`, then all relevant data will be in the value of the `result` key.
 - Feel free to contact the RDA with questions: [rdahelp](mailto:rdahelp@ucar.edu) or [Riley Conroy](mailto:rpconroy@ucar.edu)
 
+------
 
 ### Curl
 
-The list below is how to perform HTTPS GET, POST, and Delete commands using curl respectively.
+The list below is how to perform HTTPS `GET`, `POST`, and `DELETE` commands using `curl` respectively.
 
     curl -u [RDAusername]:[RDApassword] -X GET [URL]
 
-    curl -u [RDAusername]:[RDApassword] -X POST [URL]
+    curl -u [RDAusername]:[RDApassword] -X POST -d @json_control_file -H 'Content-Type:application/json'[URL]
 
     curl -u [RDAusername]:[RDApassword] -X DELETE [URL]
 
 URL in these case could be for example `https://rda.ucar.edu/apps/summary/ds083.2` or `https://rda.ucar.edu/apps/request` or `https://rda.ucar.edu/apps/request/123456`
 
+------
+
 ### WGET
 
-The list below is how to perform HTTPS GET, POST, and Delete commands using wget respectively.
+The list below is how to perform HTTPS `GET`, `POST`, and `DELETE` commands using `wget` respectively.
 
     wget --user [RDAusername] --password [RDApassword] [URL]
 
@@ -57,7 +61,10 @@ The list below is how to perform HTTPS GET, POST, and Delete commands using wget
 
 URL in these case could be for example `https://rda.ucar.edu/apps/summary/ds083.2` or `https://rda.ucar.edu/apps/request` or `https://rda.ucar.edu/apps/request/123456`
 
+------
+
 ### HTTPS GET
+
 
 ### Summary
 
@@ -100,6 +107,8 @@ GET https://rda.ucar.edu/apps/summary/[dsnnn.n]
    "request_start": "2020-03-03T10:23:45.147647"
 }
 ```
+
+------
 
 ### Param Summary
 
@@ -181,6 +190,8 @@ GET https://rda.ucar.edu/apps/paramsummary/[dsnnn.n]
 
 ```
 
+------
+
 ### Metadata
 
 #### Description
@@ -196,8 +207,201 @@ GET https://rda.ucar.edu/apps/metadata/[dsnnn.n]
 #### Example Response
 
 ```json
+{
+   "status": "ok",
+   "request_duration": "0.173482 seconds",
+   "code": 200,
+   "messages": [],
+   "result": {
+      "dsid": "083.2",
+      "subsetting_available": true,
+      "data": [
+         {
+            "product": "Analysis",
+            "param_description": "Convective inhibition",
+            "end_date": 200712060600,
+            "level": null,
+            "native_format": "WMO_GRIB1",
+            "gridproj": "latLon",
+            "griddef": "360:181:90N:0E:90S:359E:1:1",
+            "param": "CIN",
+            "levels": [
+               {
+                  "level_description": "Ground or water surface",
+                  "level": "SFC",
+                  "level_value": "0"
+               },
+               {
+                  "level_value": "0,180",
+                  "level_description": "Layer between two levels at specified pressure differences from ground to level",
+                  "level": "SPDY",
+                  "units": "mbar"
+               }
+            ],
+            "GCMD_uuid": "ebce0874-7635-4094-8ef4-968851873771",
+            "units": "J kg^-1",
+            "ISO_TopicCategoryCode": "climatologyMeteorologyAtmosphere",
+            "start_date": 199907301800
+         },
+
+        ...
+
+         {
+            "product": "Analysis",
+            "param_description": "Vertical velocity (pressure)",
+            "end_date": 200712060600,
+            "level": null,
+            "native_format": "WMO_GRIB1",
+            "gridproj": "latLon",
+            "griddef": "360:181:90N:0E:90S:359E:1:1",
+            "param": "VVEL",
+            "standard_name": "lagrangian_tendency_of_air_pressure",
+            "levels": [
+               {
+                  "level_value": "1000",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "975",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "950",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "925",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "900",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "850",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "800",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "750",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "700",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "650",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "600",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "550",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "500",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "450",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "400",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "350",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "300",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "250",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "200",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "150",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_value": "100",
+                  "level_description": "Isobaric surface",
+                  "level": "ISBL",
+                  "units": "mbar"
+               },
+               {
+                  "level_description": "Sigma level",
+                  "level": "SIGL",
+                  "level_value": "0.995"
+               }
+            ],
+            "GCMD_uuid": "841a7ac7-5981-4e93-895f-1b57c3d892a0",
+            "units": "Pa s^-1",
+            "ISO_TopicCategoryCode": "climatologyMeteorologyAtmosphere",
+            "start_date": 199907301800
+         }
+      ]
+   },
+   "request_end": "2020-03-03T11:32:33.317202",
+   "request_start": "2020-03-03T11:32:32.453649"
 
 ```
+
+------
 
 ### Status
 
@@ -206,17 +410,94 @@ GET https://rda.ucar.edu/apps/metadata/[dsnnn.n]
 Returns that status of a given request index.
 A request index is a six digit integer.
 
+Or
+
+Returns the status of all requests for user.
+
 #### URL
 
 ```
 GET https://rda.ucar.edu/apps/request/[RequestIndex]
 ```
 
-#### Example Response
-
-```json
+Or, 
 
 ```
+GET https://rda.ucar.edu/apps/request/
+```
+
+#### Example Response
+
+If `[RequestIndex]` is given
+
+```json
+   {
+   "status": "ok",
+   "request_duration": "0.046309 seconds",
+   "code": 200,
+   "messages": [],
+   "result": 
+   {
+         "status": "Completed",
+         "date_ready": "2020-03-01",
+         "request_index": 410935,
+         "NCAR_contact": "rpconroy@ucar.edu",
+         "rqstid": "LASTNAME410935",
+         "request_id": "LASTNAME410935",
+         "date_purge": "2020-03-06",
+         "date_rqst": "2020-03-01",
+         "subset_info": {
+            "note": "- Start date: 2018-01-15 00:00\n- End date: 2020-03-16 12:00\n- Parameter(s):\n    Pressure\n- Vertical level(s):\n    Specified height above ground: 80 m\n- Product(s):\n    Analysis\n- Spatial subsetting (single gridpoint):\n    Latitude: -29.5\n    Longitude: 17\n"
+         }
+      }
+   "request_end": "2020-03-03T11:35:43.433348",
+   "request_start": "2020-03-03T11:35:43.387039"
+   }
+
+```
+
+Or if `[RequestIndex]` is not specified, get all requests
+
+```json
+   {
+   "status": "ok",
+   "request_duration": "0.046309 seconds",
+   "code": 200,
+   "messages": [],
+   "result": [
+   {
+         "status": "Completed",
+         "date_ready": "2020-03-01",
+         "request_index": 410935,
+         "NCAR_contact": "rpconroy@ucar.edu",
+         "rqstid": "LASTNAME410935",
+         "request_id": "LASTNAME410935",
+         "date_purge": "2020-03-06",
+         "date_rqst": "2020-03-01",
+         "subset_info": {
+            "note": "- Start date: 2018-01-15 00:00\n- End date: 2020-03-16 12:00\n- Parameter(s):\n    Pressure\n- Vertical level(s):\n    Specified height above ground: 80 m\n- Product(s):\n    Analysis\n- Spatial subsetting (single gridpoint):\n    Latitude: -29.5\n    Longitude: 17\n"
+         }
+      },
+      {
+         "status": "Completed",
+         "date_ready": "2020-03-01",
+         "request_index": 410936,
+         "NCAR_contact": "rpconroy@ucar.edu",
+         "rqstid": "LASTNAME410936",
+         "request_id": "LASTNAME410936",
+         "date_purge": "2020-03-06",
+         "date_rqst": "2020-03-01",
+         "subset_info": {
+            "note": "- Output format: csv\n- Start date: 2019-09-15 00:00\n- End date: 2020-03-16 12:00\n- Parameter(s):\n    u-component of wind\n- Vertical level(s):\n    Specified height above ground: 100 m\n- Product(s):\n    Analysis\n- Spatial subsetting (single gridpoint):\n    Latitude: -43.75\n    Longitude: -64.5\n"
+         }
+      }
+   ],
+   "request_end": "2020-03-03T11:35:43.433348",
+   "request_start": "2020-03-03T11:35:43.387039"
+   }
+```
+
+------
 
 ### Filelist
 
@@ -233,8 +514,27 @@ GET https://rda.ucar.edu/apps/request/[RequestIndex]/filelist
 #### Example Response
 
 ```json
-
+{
+    "status": "ok",
+    "request_duration": "0.01604 seconds",
+    "code": 200,
+    "messages": [],
+    "result": {
+        "total_size": 156,
+        "web_files": [
+            {
+                "web_path": "https://rda.ucar.edu/dsrqst/LASTNAME411039/Filename.extension",
+                "wfile": "Filename.extension",
+                "size": 156
+            }
+        ]
+    },
+    "request_end": "2020-03-03T11:42:43.230800",
+    "request_start": "2020-03-03T11:42:43.214760"
+}
 ```
+
+------
 
 ### Template
 
@@ -251,7 +551,20 @@ GET https://rda.ucar.edu/apps/request/template/[dsxxx.x]
 #### Example Response
 
 ```json
+{
+   "status": "ok",
+   "request_duration": "0.007501 seconds",
+   "code": 200,
+   "messages": [],
+   "result": {
+      "template": "dataset=ds083.2\ndate=201103020000/to/201103151200\nparam=TMP/R H/ABS V\nlevel=ISBL:850/700/500\noformat=netCDF\nnlat=30\nslat=-25\nwlon=-150\nelon=-30\n#groupindex=2\ntargetdir=/glade/scratch\n"
+   },
+   "request_end": "2020-03-03T11:44:21.842582",
+   "request_start": "2020-03-03T11:44:21.835081"
+}
 ```
+
+------
 
 ### HTTPS POST
 
@@ -270,7 +583,20 @@ POST https://rda.ucar.edu/apps/request/
 #### Example Response
 
 ```json
+{
+   "status": "ok",
+   "request_duration": "1.171259 seconds",
+   "code": 200,
+   "messages": [],
+   "result": {
+      "request_id": "411298"
+   },
+   "request_end": "2020-03-03T11:45:16.513226",
+   "request_start": "2020-03-03T11:45:15.341967"
+}
 ```
+
+------
 
 ### HTTPS DELETE
 
@@ -289,5 +615,16 @@ DELETE https://rda.ucar.edu/apps/request/[RequestIndex]
 #### Example Response
 
 ```json
+{
+   "status": "ok",
+   "request_duration": "0.243377 seconds",
+   "code": 200,
+   "messages": [],
+   "result": {
+      "purge_successful": "true"
+   },
+   "request_end": "2020-03-03T11:46:17.021646",
+   "request_start": "2020-03-03T11:46:16.778269"
+}
 ```
 
