@@ -24,7 +24,7 @@
   + The client can be used as a command-line tool or as an imported python module to work with python objects directly.
   + In most cases, the client will print the JSON response after a command is entered.
   + A Jupyter Notebook was created to show the basic functionality of rdams_client.py. 
-    - [rdams_client.py can be found here](../src/python/rdams_client_example.ipynb)
+    - [The Jupyter Notebook can be found here](../src/python/rdams_client_example.ipynb)
   + [rdams_client.py can be found here](../src/python/rdams_client.py)
 - All HTTPS requests to to the RDA APPS API must have Basic Authentication headers to access the API.
   + The username and password combination would be the same as your rda.ucar.edu login combination.
