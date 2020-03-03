@@ -1,16 +1,41 @@
 # RDA External Application API Description
 
 ## Table of Contents
+- [General Information](#general-info)
 - [Curl Syntax](#curl)
 - [Wget Syntax](#wget)
-- [HTTP GET Commands and Responses](#http_get)
-- [HTTP POST Commands and Responses](#http_post)
-- [HTTP DELETE Commands and Responses](#http_delete)
+- [HTTPS GET Commands and Responses](#https-get)
+  + [Dataset Summary](#summary)
+  + [Dataset Parameter Summary](#param-summary)
+  + [Dataset Metadata](#metadata)
+  + [Request Status](#status)
+  + [Request Filelist](#filelist)
+  + [Control File Template](#template)
+- [HTTPS POST Commands and Responses](#https-post)
+  + [Submit Subset/Format Conversion Request](#submit)
+- [HTTPS DELETE Commands and Responses](#https-delete)
+  + [Purge Request](#Purge)
+
+
+### General Info
+
+- We have written a python client to abstract the request and authentication details.
+  + The client can be used as a command-line tool or as an imported python module to work with python objects directly.
+  + In most cases, the client will print the JSON response after a command is entered.
+  + A Jupyter Notebook was created to show the basic functionality of rdams_client.py. 
+    - [rdams_client.py can be found here](../src/python/rdams_client_example.ipynb)
+  + [rdams_client.py can be found here](../src/python/rdams_client.py)
+- All HTTPS requests to to the RDA APPS API must have Basic Authentication headers to access the API.
+  + The username and password combination would be the same as your rda.ucar.edu login combination.
+- Responses are JSON formatted.
+  + Typically, error responses will give an explaination of what went wrong in the value of the `messages` key. 
+  + If `status` is `ok`, then all relevant data will be in the value of the `result` key.
+- Feel free to contact the RDA with questions: [rdahelp](mailto:rdahelp@ucar.edu) or [Riley Conroy](mailto:rpconroy@ucar.edu)
 
 
 ### Curl
 
-The list below is how to perform HTTP GET, POST, and Delete commands using curl respectively.
+The list below is how to perform HTTPS GET, POST, and Delete commands using curl respectively.
 
     curl -u [RDAusername]:[RDApassword] -X GET [URL]
 
@@ -22,7 +47,7 @@ URL in these case could be for example `https://rda.ucar.edu/apps/summary/ds083.
 
 ### WGET
 
-The list below is how to perform HTTP GET, POST, and Delete commands using wget respectively.
+The list below is how to perform HTTPS GET, POST, and Delete commands using wget respectively.
 
     wget --user [RDAusername] --password [RDApassword] [URL]
 
@@ -32,7 +57,9 @@ The list below is how to perform HTTP GET, POST, and Delete commands using wget 
 
 URL in these case could be for example `https://rda.ucar.edu/apps/summary/ds083.2` or `https://rda.ucar.edu/apps/request` or `https://rda.ucar.edu/apps/request/123456`
 
-### HTTP GET
+### HTTPS GET
+
+### Summary
 
 #### Description
 Returns a summary of datasets and dataset groups that have subsetting available.
@@ -74,43 +101,193 @@ GET https://rda.ucar.edu/apps/summary/[dsnnn.n]
 }
 ```
 
-Returns a summary of dataset groups that have subsetting available in `dsnnn.n`.
+### Param Summary
 
-    GET https://rda.ucar.edu/apps/metadata/[dsnnn.n]
-Returns a list of all available parameters found in `dsnnn.n` for subsetting.
+#### Description
 
-    GET https://rda.ucar.edu/apps/metadata/[dsnnn.n]/-f
-Returns a list of all available parameters found in `dsnnn.n` for subsetting in fixed sized columns.
+Returns a summary of only the Parameters in a dataset for subsetting.
 
-    GET https://rda.ucar.edu/apps/paramsummary/[dsnnn.n]
-Returns a summary of all available parameters (only parameters) found in `dsnnn.n` for subsetting.
+#### URL
 
-    GET https://rda.ucar.edu/apps/paramsummary/[dsnnn.n]/-f
-Returns a summary of all available parameters (only parameters) found in `dsnnn.n` for subsetting in fixed sized columns.
+```
+GET https://rda.ucar.edu/apps/paramsummary/[dsnnn.n]
+```
 
-    GET https://rda.ucar.edu/apps/template
-Returns a RDA Data subset request control file template for RDA dataset `dsnnn.n`. This for use with the `rdams-client.py` tool, but can be easily mapped into a JSON structure.
+#### Example Response
 
-    GET https://rda.ucar.edu/apps/template/[dsnnn.n]
-Returns a RDA Data subset request control file template for RDA dataset `dsnnn.n`. This for use with the rdams-client.py tool, but can be easily mapped into a JSON structure. For an example see [ds131.2_control_file](ds131.2_control_file).
+```json
+{
+   "status": "ok",
+   "request_duration": "0.173482 seconds",
+   "code": 200,
+   "messages": [],
+   "result": {
+      "dsid": "083.2",
+      "subsetting_available": true,
+      "data": [
+         {
+            "native_format": "WMO_GRIB2",
+            "param": "VIS",
+            "GCMD_uuid": "9337898d-68dc-43d7-93a9-6afdb4ab1784",
+            "units": "m",
+            "param_description": "Visibility"
+         },
+         {
+            "param_description": "Categorical snow (yes=1; no=0)",
+            "native_format": "WMO_GRIB2",
+            "param": "CSNOW"
+         },
+         {
+            "native_format": "WMO_GRIB2",
+            "param": "PEVPR",
+            "standard_name": "potential_water_evaporation_flux",
+            "GCMD_uuid": "b68ab978-6db6-49ee-84e2-5f37b461a998",
+            "units": "W m^-2",
+            "param_description": "Potential evaporation rate"
+         },
+         {
+            "native_format": "WMO_GRIB2",
+            "param": "T CDC",
+            "GCMD_uuid": "acb52274-6c0d-4241-a979-3fa3efca6702",
+            "units": "%",
+            "param_description": "Total cloud cover"
+         },
 
-    POST -H "Content-Type: application/json" -d @dsnnn.n.json https://rda.ucar.edu/apps/request
-Submits a RDA Data subset request by sending a JSON data structure found in the file named `dsnnn.n.json` to the RDA data server. For an example see [ds131.2.json](ds131.2.json), which is mapped from the [ds131.2_control_file](ds131.2_control_file).
+         ...
 
-    GET https://rda.ucar.edu/apps/request
-Returns a summary and status of all current RDA Data Requests.
+         {
+            "native_format": "WMO_GRIB1",
+            "param": "ABSV",
+            "standard_name": "atmosphere_absolute_vorticity",
+            "ISO_TopicCategoryCode": "climatologyMeteorologyAtmosphere",
+            "units": "s^-1",
+            "GCMD_uuid": "858a80ff-5aa4-4590-b2e2-e88a802a6ee4",
+            "param_description": "Absolute vorticity"
+         },
+         {
+            "native_format": "WMO_GRIB1",
+            "param": "VVEL",
+            "standard_name": "lagrangian_tendency_of_air_pressure",
+            "ISO_TopicCategoryCode": "climatologyMeteorologyAtmosphere",
+            "units": "Pa s^-1",
+            "GCMD_uuid": "841a7ac7-5981-4e93-895f-1b57c3d892a0",
+            "param_description": "Vertical velocity (pressure)"
+         }
+      ]
+   },
+   "request_end": "2020-03-03T10:52:38.637789",
+   "request_start": "2020-03-03T10:52:38.464307"
+}
 
-    GET https://rda.ucar.edu/apps/request/[RequestId]
-Returns a summary and status of RDA Data Request `RequestId`.
+```
 
-    GET https://rda.ucar.edu/apps/request/[RequestId]/-proc_status
-Returns only a status of RDA Data Request `RequestId`.
+### Metadata
 
-    GET https://rda.ucar.edu/apps/request/[RequestId]/-globus_download
-Set up a Globus Endpoint Share to download RDA Data Request `RequestId`.
+#### Description
 
-    GET https://rda.ucar.edu/apps/request/[RequestId]/filelist
-Returns a JSON of {"FileDownloadPath":"Filesize (Bytes)"} for RDA Data Request `RequestId`.
+Returns full metadata of a dataset available for subsetting.
 
-    DELETE https://rda.ucar.edu/apps/request/[RequestId]
-Purges RDA Data Request `RequestId` from RDA data server.
+#### URL
+
+```
+GET https://rda.ucar.edu/apps/metadata/[dsnnn.n]
+```
+
+#### Example Response
+
+```json
+
+```
+
+### Status
+
+#### Description
+
+Returns that status of a given request index.
+A request index is a six digit integer.
+
+#### URL
+
+```
+GET https://rda.ucar.edu/apps/request/[RequestIndex]
+```
+
+#### Example Response
+
+```json
+
+```
+
+### Filelist
+
+#### Description
+
+Returns the available files generated from a request.
+
+#### URL
+
+```
+GET https://rda.ucar.edu/apps/request/[RequestIndex]/filelist
+```
+
+#### Example Response
+
+```json
+
+```
+
+### Template
+
+#### Description
+
+Returns an example control file for a give dataset.
+
+#### URL
+
+```
+GET https://rda.ucar.edu/apps/request/template/[dsxxx.x]
+```
+
+#### Example Response
+
+```json
+```
+
+### HTTPS POST
+
+### Submit
+
+#### Description
+
+Submits a request, where the post data is json formatted control file
+
+#### URL
+
+```
+POST https://rda.ucar.edu/apps/request/
+```
+
+#### Example Response
+
+```json
+```
+
+### HTTPS DELETE
+
+### Purge
+
+#### Description
+
+Deletes a given RequestIndex. This may be necessary as Users may only have up to 8 requests open at a given time. By default an open request will be available for 7 days. Contact the specialist for the dataset to extend the amount of time it is available. 
+
+#### URL
+
+```
+DELETE https://rda.ucar.edu/apps/request/[RequestIndex]
+```
+
+#### Example Response
+
+```json
+```
+
