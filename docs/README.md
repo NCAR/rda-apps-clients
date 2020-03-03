@@ -45,7 +45,7 @@ The list below is how to perform HTTPS `GET`, `POST`, and `DELETE` commands usin
 
     curl -u [RDAusername]:[RDApassword] -X DELETE [URL]
 
-URL in these case could be for example `https://rda.ucar.edu/apps/summary/ds083.2` or `https://rda.ucar.edu/apps/request` or `https://rda.ucar.edu/apps/request/123456`
+URL in these case could be for example `https://rda.ucar.edu/json_apps/summary/ds083.2` or `https://rda.ucar.edu/json_apps/request` or `https://rda.ucar.edu/json_apps/request/123456`
 
 ------
 
@@ -59,7 +59,7 @@ The list below is how to perform HTTPS `GET`, `POST`, and `DELETE` commands usin
 
     wget --user [RDAusername] --password [RDApassword] --method=delete [URL]
 
-URL in these case could be for example `https://rda.ucar.edu/apps/summary/ds083.2` or `https://rda.ucar.edu/apps/request` or `https://rda.ucar.edu/apps/request/123456`
+URL in these case could be for example `https://rda.ucar.edu/json_apps/summary/ds083.2` or `https://rda.ucar.edu/json_apps/request` or `https://rda.ucar.edu/json_apps/request/123456`
 
 ------
 
@@ -74,7 +74,7 @@ Returns a summary of datasets and dataset groups that have subsetting available.
 #### URL
 
 ```
-GET https://rda.ucar.edu/apps/summary/[dsnnn.n]
+GET https://rda.ucar.edu/json_apps/summary/[dsnnn.n]
 ```
 
 #### Example Response
@@ -119,7 +119,7 @@ Returns a summary of only the Parameters in a dataset for subsetting.
 #### URL
 
 ```
-GET https://rda.ucar.edu/apps/paramsummary/[dsnnn.n]
+GET https://rda.ucar.edu/json_apps/paramsummary/[dsnnn.n]
 ```
 
 #### Example Response
@@ -201,7 +201,7 @@ Returns full metadata of a dataset available for subsetting.
 #### URL
 
 ```
-GET https://rda.ucar.edu/apps/metadata/[dsnnn.n]
+GET https://rda.ucar.edu/json_apps/metadata/[dsnnn.n]
 ```
 
 #### Example Response
@@ -417,13 +417,13 @@ Returns the status of all requests for user.
 #### URL
 
 ```
-GET https://rda.ucar.edu/apps/request/[RequestIndex]
+GET https://rda.ucar.edu/json_apps/request/[RequestIndex]
 ```
 
 Or, 
 
 ```
-GET https://rda.ucar.edu/apps/request/
+GET https://rda.ucar.edu/json_apps/request/
 ```
 
 #### Example Response
@@ -508,7 +508,7 @@ Returns the available files generated from a request.
 #### URL
 
 ```
-GET https://rda.ucar.edu/apps/request/[RequestIndex]/filelist
+GET https://rda.ucar.edu/json_apps/request/[RequestIndex]/filelist
 ```
 
 #### Example Response
@@ -545,7 +545,7 @@ Returns an example control file for a give dataset.
 #### URL
 
 ```
-GET https://rda.ucar.edu/apps/request/template/[dsxxx.x]
+GET https://rda.ucar.edu/json_apps/request/template/[dsxxx.x]
 ```
 
 #### Example Response
@@ -577,7 +577,7 @@ Submits a request, where the post data is json formatted control file
 #### URL
 
 ```
-POST https://rda.ucar.edu/apps/request/
+POST https://rda.ucar.edu/json_apps/request/
 ```
 
 #### Example Response
@@ -609,7 +609,7 @@ Deletes a given RequestIndex. This may be necessary as Users may only have up to
 #### URL
 
 ```
-DELETE https://rda.ucar.edu/apps/request/[RequestIndex]
+DELETE https://rda.ucar.edu/json_apps/request/[RequestIndex]
 ```
 
 #### Example Response
