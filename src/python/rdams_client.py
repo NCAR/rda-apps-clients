@@ -167,7 +167,7 @@ def get_parser():
             help="Get only parameters for a given dataset.")
     group.add_argument('-submit', '-s',
             type=str,
-            metavar='<dsid>',
+            metavar='<control file>',
             required=False,
             help="Submit a request using a control file.")
     group.add_argument('-get_status', '-gs',
