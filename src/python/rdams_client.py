@@ -182,6 +182,11 @@ def get_parser():
             required=False,
             metavar='<Request Index>',
             help="Download data given a request id.")
+    group.add_argument('-get_filelist', '-gf',
+            type=str,
+            required=False,
+            metavar='<Request Index>',
+            help="Query the filelist for a completed request.")
     group.add_argument('-globus_download', '-gd',
             type=str,
             required=False,
@@ -563,6 +568,7 @@ def get_selected_function(args_dict):
             'submit' : submit,
             'get_status' : get_status,
             'download' : download,
+            'get_filelist' : get_filelist,
             'globus_download' : globus_download,
             'get_control_file_template' : write_control_file_template,
             'purge' : purge_request
