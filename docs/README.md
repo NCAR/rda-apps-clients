@@ -1,3 +1,11 @@
+# RDA apps clients
+
+This repository contains the Research Data Archive (RDA) apps clients.
+Subdirectories are organized by language, e.g. python, perl, c++, bash
+
+At this stage, the (RDA) REST API clients are available for Python (2.x and 3.x), see [src/python](src/python) for more details.
+
+
 # RDA External Application API Description
 
 ## Table of Contents
