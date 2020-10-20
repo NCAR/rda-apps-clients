@@ -73,6 +73,13 @@ def add_ds_str(ds_num):
         sys.exit()
     return ds_num
 
+def obfuscate(string):
+    """Obfuscate string"""
+    return string.encode('unicode-escape').encode('rot13')
+def unobfuscate(string):
+    """Decode obfuscated string"""
+    return string.decode('rot13').decode('unicode-escape')
+
 def get_userinfo():
     """Get username and password from the command line."""
     user = input("Enter your RDA username or email: ")
