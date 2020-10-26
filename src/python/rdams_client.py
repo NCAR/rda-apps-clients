@@ -18,13 +18,13 @@ rdams-client.py -help
 __version__ = '2.0.0'
 __author__ = 'Doug Schuster (schuster@ucar.edu), Riley Conroy (rpconroy@ucar.edu)'
 
-import pdb
 import sys
 import os
 import requests
 import getpass
 import json
 import argparse
+import codecs
 
 
 BASE_URL = 'https://rda.ucar.edu/json_apps/'
@@ -74,27 +74,28 @@ def add_ds_str(ds_num):
     return ds_num
 
 def obfuscate(string):
-    """Obfuscate string"""
-    return string.encode('unicode-escape').encode('rot13')
+    """Obfuscate string."""
+    return codecs.encode(string, 'rot_13')
 def unobfuscate(string):
-    """Decode obfuscated string"""
-    return string.decode('rot13').decode('unicode-escape')
+    """Decode obfuscated string."""
+    return codecs.decode(string, 'rot_13')
 
 def get_userinfo():
     """Get username and password from the command line."""
     user = input("Enter your RDA username or email: ")
     pasw = getpass.getpass("Enter your RDA password: ")
-    try:
-        write_pw_file(user, pasw)
-    except:
-        pass
+    #try:
+    write_pw_file(user, pasw)
+    #except Exception as e:
+    #    print("Error writing password file: " + str(e))
     return(user, pasw)
 
 def write_pw_file(username, password, pwfile=DEFAULT_AUTH_FILE):
     """Write out file with user information."""
     with open(pwfile, "w") as fo:
         npwstring = username + ',' + password
-        fo.write(npwstring)
+        ob_str = obfuscate(npwstring)
+        fo.write(ob_str)
 
 def read_pw_file(pwfile):
     """Read user information from pw file.
@@ -106,7 +107,7 @@ def read_pw_file(pwfile):
         (tuple): (username,password)
     """
     with open(pwfile, 'r') as f:
-        pwstring = f.read()
+        pwstring = unobfuscate(f.read())
         (username, password) = pwstring.split(',', 2)
     return(username, password)
 
