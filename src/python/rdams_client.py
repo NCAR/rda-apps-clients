@@ -15,7 +15,7 @@ rdams-client.py -get_control_file_template <dsnnn.n>
 rdams-client.py -help
 ```
 """
-__version__ = '2.0.0'
+__version__ = '2.0.1'
 __author__ = 'Doug Schuster (schuster@ucar.edu), Riley Conroy (rpconroy@ucar.edu)'
 
 import sys
@@ -476,8 +476,9 @@ def download(request_idx):
     cookies = get_cookies(username,password)
 
     web_files = list(map(lambda x: x['web_path'], filelist))
-
-    download_files(web_files)
+    
+    # Only download unique files.
+    download_files(set(web_files))
     return ret
 
 def globus_download(request_idx):
