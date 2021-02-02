@@ -135,6 +135,12 @@ def read_control_file(control_file):
         li = line.rstrip()
         (key, value) = li.split('=', 2)
         control_params[key] = value
+
+    # Handle empty params
+    if 'param' in control_params and control_params['param'].strip() == '':
+        all_params = get_all_params(control_params['dataset'])
+        control_params['param'] = '/'.join(all_params)
+
     try:
         myfile.close()
     except:
@@ -353,6 +359,23 @@ def get_metadata(ds):
     check_status(ret)
     return ret.json()
 
+def get_all_params(ds):
+    """Return set of parameters for a dataset.
+
+    Args:
+        ds (str): Datset id. e.g. 'ds083.2'
+
+    Returns:
+        set: All unique params in dataset.
+    """
+    res = get_param_summary(ds)
+    res_data = res['result']['data']
+    param_names = set()
+    for param in res_data:
+        param_names.add(param['param'])
+    return param_names
+
+
 def get_param_summary(ds):
     """Return summary of parameters for a dataset.
 
@@ -370,6 +393,7 @@ def get_param_summary(ds):
 
     check_status(ret)
     return ret.json()
+
 
 def submit_json(json_file):
     """Submit a RDA subset or format conversion request using json file or dict.
@@ -476,7 +500,7 @@ def download(request_idx):
     cookies = get_cookies(username,password)
 
     web_files = list(map(lambda x: x['web_path'], filelist))
-    
+
     # Only download unique files.
     download_files(set(web_files))
     return ret
