@@ -516,7 +516,7 @@ Returns the available files generated from a request.
 #### URL
 
 ```
-GET https://rda.ucar.edu/json_apps/request/[RequestIndex]/filelist
+GET https://rda.ucar.edu/json_apps/request/[RequestIndex]/filelist_json
 ```
 
 #### Example Response
