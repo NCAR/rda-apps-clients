@@ -43,32 +43,32 @@ To submit an example request, try the following:
 
 - Download an example control file for the data set of your choice, `dsnnn.n`:
 ```
-rdams -get_control_file_template <dsnnn.n>
+rdams.py -get_control_file_template <dsnnn.n>
 ```
 
 - Submit the example control file for "dsnnn.n" into the system as a subset request:
 ```
-rdams -submit [dsnnn.n_control_file]
+rdams.py -submit [dsnnn.n_control_file]
 ```
 
 - Check on subset request processing status:
 ```
-rdams -get_status
+rdams.py -get_status
 ```
 
 - Download completed requests (only for external users):
 ```
-rdams -download [RequestIndex]
+rdams.py -download [RequestIndex]
 ```
 
 - Get a listing of parameters available for subsetting (used to populate dsnnn.n_control_file):
 ```
-rdams -get_metadata dsnnn.n
+rdams.py -get_metadata dsnnn.n
 ```
 
 - Download a generic control file template that includes field descriptors:
 ```
-rdams -get_control_file_template
+rdams.py -get_control_file_template
 ```
 
 ### Description of Parameters in Control File Template
