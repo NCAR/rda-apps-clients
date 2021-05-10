@@ -1,27 +1,27 @@
-# `rdams-client` for Python
+# `rdams_client` for Python
 
-The `rdams-client` Python utility can be run by registered RDA users to get detailed metadata for RDA data sets, to submit subset requests on select gridded data sets, to check on the processing status of any subset requests, and to download completed request output files to a local system.
+The `rdams_client` Python utility can be run by registered RDA users to get detailed metadata for RDA data sets, to submit subset requests on select gridded data sets, to check on the processing status of any subset requests, and to download completed request output files to a local system.
 
 The script can be used both on the command line or loaded as a module to interact with the response object directly. The Jupyter Notebook in this directory provides an example of how you could potentially use the module.
 
-`rdams-client.py` can be run using both python 2 and python 3, however, the `requests` library is required load the script.
+`rdams_client.py` can be run using both python 2 and python 3, however, the `requests` library is required load the script.
 
 ## Installation
 
-Download the `rdams-client` for the version of Python you are using (Python 2.x or Python 3.x) and execute `python rdams-client.py -help` for additional information.
+Download the `rdams_client` for the version of Python you are using (Python 2.x or Python 3.x) and execute `python rdams_client.py -help` for additional information.
 
 ## Usage
 
 ```
-python rdams-client.py -get_summary <dsnnn.n>
-python rdams-client.py -get_metadata <dsnnn.n> <-f>
-python rdams-client.py -get_param_summary <dsnnn.n> <-f>
-python rdams-client.py -submit [control_file_name]
-python rdams-client.py -get_status <RequestIndex> <-proc_status>
-python rdams-client.py -download [RequestIndex]
-python rdams-client.py -globus_download [RequestIndex]
-python rdams-client.py -get_control_file_template <dsnnn.n>
-python rdams-client.py -help
+python rdams_client.py -get_summary <dsnnn.n>
+python rdams_client.py -get_metadata <dsnnn.n> <-f>
+python rdams_client.py -get_param_summary <dsnnn.n> <-f>
+python rdams_client.py -submit [control_file_name]
+python rdams_client.py -get_status <RequestIndex> <-proc_status>
+python rdams_client.py -download [RequestIndex]
+python rdams_client.py -globus_download [RequestIndex]
+python rdams_client.py -get_control_file_template <dsnnn.n>
+python rdams_client.py -help
 ```
 
 ### Description of Options
