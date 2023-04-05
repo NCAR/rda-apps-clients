@@ -10,6 +10,7 @@ At this stage, the (RDA) REST API clients are available for Python (2.x and 3.x)
 
 ## Table of Contents
 - [General Information](#general-info)
+- [Install](#install)
 - [Curl Syntax](#curl)
 - [Wget Syntax](#wget)
 - [HTTPS GET Commands and Responses](#https-get)
@@ -40,6 +41,18 @@ At this stage, the (RDA) REST API clients are available for Python (2.x and 3.x)
   + Typically, error responses will give an explaination of what went wrong in the value of the `messages` key. 
   + If `status` is `ok`, then all relevant data will be in the value of the `result` key.
 - Feel free to contact the RDA with questions: [rdahelp](mailto:rdahelp@ucar.edu) or [Riley Conroy](mailto:rpconroy@ucar.edu)
+
+------
+### Install
+
+While the python client can simply be downloaded from github and used provided you have the `requests` library installed, we also have a package that can be installed using pip:
+
+    pip install rda-apps-clients
+
+This gives you command line access to the command `rdams_client` that is a essentially an alias to rdams_client.py.
+Additionally, you can programatically use the module via
+    
+    from rda_apps_clients import rdams_client
 
 ------
 
