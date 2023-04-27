@@ -82,6 +82,10 @@ def unobfuscate(string):
 
 def get_userinfo():
     """Get username and password from the command line."""
+    try:
+        input = raw_input
+    except NameError:
+        pass
     user = input("Enter your RDA username or email: ")
     pasw = getpass.getpass("Enter your RDA password: ")
     #try:
@@ -453,6 +457,8 @@ def get_status(request_idx=None):
 
 
     user_auth = get_authentication()
+    print(url)
+    print(user_auth)
     ret = requests.get(url, auth=user_auth)
 
     check_status(ret)
