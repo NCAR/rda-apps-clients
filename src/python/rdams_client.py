@@ -457,8 +457,6 @@ def get_status(request_idx=None):
 
 
     user_auth = get_authentication()
-    print(url)
-    print(user_auth)
     ret = requests.get(url, auth=user_auth)
 
     check_status(ret)
