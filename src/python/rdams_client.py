@@ -25,12 +25,18 @@ import getpass
 import json
 import argparse
 import codecs
+import pdb
 
 
 BASE_URL = 'https://rda.ucar.edu/json_apps/'
 USE_NETRC = False
 DEFAULT_AUTH_FILE = './rdamspw.txt'
 
+# Python 2 compatibility
+try:
+    input = raw_input
+except NameError:
+    pass
 
 def query(args=None):
     """Perform a query based on command line like arguments.
@@ -82,10 +88,6 @@ def unobfuscate(string):
 
 def get_userinfo():
     """Get username and password from the command line."""
-    try:
-        input = raw_input
-    except NameError:
-        pass
     user = input("Enter your RDA username or email: ")
     pasw = getpass.getpass("Enter your RDA password: ")
     #try:
