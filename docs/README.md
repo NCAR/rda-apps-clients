@@ -35,8 +35,8 @@ At this stage, the (RDA) REST API clients are available for Python (2.x and 3.x)
   + A Jupyter Notebook was created to show the basic functionality of rdams_client.py. 
     - [The Jupyter Notebook can be found here](../src/python/rdams_client_example.ipynb)
   + [rdams_client.py can be found here](../src/python/rdams_client.py)
-- All HTTPS requests to to the RDA APPS API must have Basic Authentication headers to access the API.
-  + The username and password combination would be the same as your rda.ucar.edu login combination.
+- All HTTPS requests to to the RDA APPS API must include a bearer token to access the API.
+  + Token information can be found on [you user profile](https://rda.ucar.edu/accounts/profile)
 - Responses are JSON formatted.
   + Typically, error responses will give an explaination of what went wrong in the value of the `messages` key. 
   + If `status` is `ok`, then all relevant data will be in the value of the `result` key.
@@ -45,7 +45,7 @@ At this stage, the (RDA) REST API clients are available for Python (2.x and 3.x)
 ------
 ### Install
 
-While the python client can simply be downloaded from github and used provided you have the `requests` library installed, we also have a package that can be installed using pip:
+While the python client can simply be downloaded from github and used provided you have `requests` installed, we also have a package that can be installed using pip:
 
     pip install rda-apps-clients
 
@@ -55,7 +55,17 @@ Additionally, you can programatically use the module via
     from rda_apps_clients import rdams_client
 
 ------
+### Authentication
 
+`POST`, or `DETLETE` HTTP requests require that you include a bearer token in your URL.
+To do this you would need to first find your token in [you user profile](https://rda.ucar.edu/accounts/profile).
+Next, you would append this token to the end of any url using `?token=[bearer token]. For example,
+```
+https://rda.ucar.edu/api/get_status/?token=dkjf93f93jf8n9vdfh
+```
+This step is abstracted if using the python client, `rdams_client.py`
+
+------
 ### Curl
 
 The list below is how to perform HTTPS `GET`, `POST`, and `DELETE` commands using `curl` respectively.
@@ -66,7 +76,7 @@ The list below is how to perform HTTPS `GET`, `POST`, and `DELETE` commands usin
 
     curl -u [RDAusername]:[RDApassword] -X DELETE [URL]
 
-URL in these case could be for example `https://rda.ucar.edu/json_apps/summary/ds083.2` or `https://rda.ucar.edu/json_apps/request` or `https://rda.ucar.edu/json_apps/request/123456`
+URL in these examples could be for example `https://rda.ucar.edu/api/summary/ds083.2` or `https://rda.ucar.edu/api/get_status` or `https://rda.ucar.edu/api/get_req_files/123456`
 
 ------
 
@@ -80,7 +90,7 @@ The list below is how to perform HTTPS `GET`, `POST`, and `DELETE` commands usin
 
     wget --user [RDAusername] --password [RDApassword] --method=delete [URL]
 
-URL in these case could be for example `https://rda.ucar.edu/json_apps/summary/ds083.2` or `https://rda.ucar.edu/json_apps/request` or `https://rda.ucar.edu/json_apps/request/123456`
+URL in these case could be for example `https://rda.ucar.edu/api/summary/ds083.2` or `https://rda.ucar.edu/api/request` or `https://rda.ucar.edu/api/request/123456`
 
 ------
 
@@ -95,15 +105,14 @@ Returns a summary of datasets and dataset groups that have subsetting available.
 #### URL
 
 ```
-GET https://rda.ucar.edu/json_apps/summary/[dsnnn.n]
+GET https://rda.ucar.edu/api/summary/[dsnnn.n]
 ```
 
 #### Example Response
 ```json
 {
-   "status": "ok",
    "request_duration": "0.049611 seconds",
-   "code": 200,
+   "https_response": 200,
    "messages": [],
    "result": {
       "subsetting_available": true,
@@ -140,16 +149,15 @@ Returns a summary of only the Parameters in a dataset for subsetting.
 #### URL
 
 ```
-GET https://rda.ucar.edu/json_apps/paramsummary/[dsnnn.n]
+GET https://rda.ucar.edu/api/paramsummary/[dsnnn.n]
 ```
 
 #### Example Response
 
 ```json
 {
-   "status": "ok",
    "request_duration": "0.173482 seconds",
-   "code": 200,
+   "https_response": 200,
    "messages": [],
    "result": {
       "dsid": "083.2",
@@ -222,16 +230,15 @@ Returns full metadata of a dataset available for subsetting.
 #### URL
 
 ```
-GET https://rda.ucar.edu/json_apps/metadata/[dsnnn.n]
+GET https://rda.ucar.edu/api/metadata/[dsnnn.n]
 ```
 
 #### Example Response
 
 ```json
 {
-   "status": "ok",
    "request_duration": "0.173482 seconds",
-   "code": 200,
+   "https_response": 200,
    "messages": [],
    "result": {
       "dsid": "083.2",
@@ -438,13 +445,13 @@ Returns the status of all requests for user.
 #### URL
 
 ```
-GET https://rda.ucar.edu/json_apps/request/[RequestIndex]
+GET https://rda.ucar.edu/api/get_status/[RequestIndex]
 ```
 
 Or, 
 
 ```
-GET https://rda.ucar.edu/json_apps/request/
+GET https://rda.ucar.edu/api/get_status/
 ```
 
 #### Example Response
@@ -453,9 +460,8 @@ If `[RequestIndex]` is given
 
 ```json
    {
-   "status": "ok",
    "request_duration": "0.046309 seconds",
-   "code": 200,
+   "https_response": 200,
    "messages": [],
    "result": 
    {
@@ -481,9 +487,8 @@ Or if `[RequestIndex]` is not specified, get all requests
 
 ```json
    {
-   "status": "ok",
    "request_duration": "0.046309 seconds",
-   "code": 200,
+   "https_response": 200,
    "messages": [],
    "result": [
    {
@@ -529,16 +534,15 @@ Returns the available files generated from a request.
 #### URL
 
 ```
-GET https://rda.ucar.edu/json_apps/request/[RequestIndex]/filelist_json
+GET https://rda.ucar.edu/api/get_req_files/[RequestIndex]
 ```
 
 #### Example Response
 
 ```json
 {
-    "status": "ok",
     "request_duration": "0.01604 seconds",
-    "code": 200,
+    "https_response": 200,
     "messages": [],
     "result": {
         "total_size": 156,
@@ -566,16 +570,15 @@ Returns an example control file for a give dataset.
 #### URL
 
 ```
-GET https://rda.ucar.edu/json_apps/request/template/[dsxxx.x]
+GET https://rda.ucar.edu/api/control_file_template/[dsxxx.x]
 ```
 
 #### Example Response
 
 ```json
 {
-   "status": "ok",
    "request_duration": "0.007501 seconds",
-   "code": 200,
+   "https_response": 200,
    "messages": [],
    "result": {
       "template": "dataset=ds083.2\ndate=201103020000/to/201103151200\nparam=TMP/R H/ABS V\nlevel=ISBL:850/700/500\noformat=netCDF\nnlat=30\nslat=-25\nwlon=-150\nelon=-30\n#groupindex=2\ntargetdir=/glade/scratch\n"
@@ -598,16 +601,15 @@ Submits a request, where the post data is json formatted control file
 #### URL
 
 ```
-POST https://rda.ucar.edu/json_apps/request/
+POST https://rda.ucar.edu/api/submit
 ```
 
 #### Example Response
 
 ```json
 {
-   "status": "ok",
    "request_duration": "1.171259 seconds",
-   "code": 200,
+   "https_response": 200,
    "messages": [],
    "result": {
       "request_id": "411298"
@@ -630,16 +632,15 @@ Deletes a given RequestIndex. This may be necessary as Users may only have up to
 #### URL
 
 ```
-DELETE https://rda.ucar.edu/json_apps/request/[RequestIndex]
+DELETE https://rda.ucar.edu/api/purge/[RequestIndex]
 ```
 
 #### Example Response
 
 ```json
 {
-   "status": "ok",
    "request_duration": "0.243377 seconds",
-   "code": 200,
+   "https_response": 200,
    "messages": [],
    "result": {
       "purge_successful": "true"

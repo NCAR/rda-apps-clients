@@ -2,7 +2,7 @@
 
 The `rdams_client` Python utility can be run by registered RDA users to get detailed metadata for RDA data sets, to submit subset requests on select gridded data sets, to check on the processing status of any subset requests, and to download completed request output files to a local system.
 
-The script can be used both on the command line or loaded as a module to interact with the response object directly. The Jupyter Notebook in this directory provides an example of how you could potentially use the module.
+The script can be used both on the command line or loaded as a module to interact with the response object directly. The Jupyter Notebooks in this directory provides an example of how you could potentially use the module.
 
 `rdams_client.py` can be run using both python 2 and python 3, however, the `requests` library is required load the script.
 
@@ -11,7 +11,9 @@ The script can be used both on the command line or loaded as a module to interac
 Download the `rdams_client` for the version of Python you are using (Python 2.x or Python 3.x) and execute `python rdams_client.py -help` for additional information.
 
 ## Usage
+`rdams_client.py` can be used as a command line tool or as a python module.
 
+**Command line Options**
 ```
 python rdams_client.py -get_summary <dsnnn.n>
 python rdams_client.py -get_metadata <dsnnn.n> <-f>
@@ -33,7 +35,7 @@ python rdams_client.py -help
 - `-submit [control_file_name]` is used to submit a subset request control file. Subset request control files are built from the parameters dumped out by the `-get_metadata <dsnnn.n>` option.
 - `-get_status` dumps out the status of all subset requests.
 - `-get_status <RequestID>` dumps out the status of subset request `RequestID`.
-- `-download [RequestIndex]` download request output files for `RequestIndex` to your local system. *only for external users*
+- `-download [RequestIndex]` download request output files for `RequestIndex` to your local system. *Only for external users*
 - `-get_control_file_template` dumps out an example control file template to your local directory.
 - `-get_control_file_template <dsnnn.n>` dumps out a working example control file for dsnnn.n to your local directory.
 
