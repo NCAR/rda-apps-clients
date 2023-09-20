@@ -28,7 +28,7 @@ import codecs
 import pdb
 
 
-BASE_URL = 'https://rda-web-test01.ucar.edu/api/'
+BASE_URL = 'https://rda.ucar.edu/api/'
 DEFAULT_AUTH_FILE = './rdams_token.txt'
 
 # Python 2 compatibility
