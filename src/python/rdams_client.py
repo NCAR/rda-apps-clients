@@ -59,6 +59,9 @@ def query(args=None):
     args = parser.parse_args(args)
     args_dict = args.__dict__
     func,params = get_selected_function(args_dict)
+    if args_dict['outdir'] and func==download:
+        out_dir = args_dict['outdir']
+        return func(params, out_dir)
     result = func(params)
     if not args.noprint:
         print(json.dumps(result, indent=3))
@@ -148,6 +151,10 @@ def get_parser():
             action='store_true',
             required=False,
             help="Do not print result of queries.")
+    parser.add_argument('-outdir', '-od',
+            nargs='?',
+            required=False,
+            help="Change the output directory of downloaded files")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-get_summary', '-gsum',
             type=str,
@@ -435,7 +442,7 @@ def get_filelist(request_idx):
     return ret.json()
 
 
-def download(request_idx):
+def download(request_idx, out_dir='./'):
     """Download files given request Index
 
     Args:
@@ -455,7 +462,7 @@ def download(request_idx):
     web_files = list(map(lambda x: x['web_path'], filelist))
 
     # Only download unique files.
-    download_files(set(web_files))
+    download_files(set(web_files), out_dir)
     return ret
 
 def globus_download(request_idx):
