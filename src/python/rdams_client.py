@@ -102,7 +102,7 @@ def read_token_file(token_file):
     """
     with open(token_file, 'r') as f:
         token = f.read()
-    return token
+    return token.strip()
 
 def read_control_file(control_file):
     """Reads control file, and return python dict.
