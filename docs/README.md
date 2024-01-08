@@ -59,6 +59,7 @@ Additionally, you can programatically use the module via
 
 `POST`, `DELETE`, and some user-specific 'GET' HTTP requests require that you include a bearer token in your URL.
 To do this you would need to first find your token in [you user profile](https://rda.ucar.edu/accounts/profile).
+
 Next, you would append this token to the end of any url using `?token=[bearer token]. For example,
 ```
 https://rda.ucar.edu/api/get_status/?token=dkjf93f93jf8n9vdfh
@@ -437,6 +438,7 @@ GET https://rda.ucar.edu/api/metadata/[dsnnn.n]
 
 Returns that status of a given request index.
 A request index is a six digit integer. 
+
 An authentication token is needed for this for this request. See [Authentication Section](#authentication) for more details.
 
 Or
@@ -531,6 +533,7 @@ Or if `[RequestIndex]` is not specified, get all requests
 #### Description
 
 Returns the available files generated from a request.
+
 An authentication token is needed for this for this request. See [Authentication Section](#authentication) for more details.
 
 #### URL
@@ -599,6 +602,7 @@ GET https://rda.ucar.edu/api/control_file_template/[dsxxx.x]
 #### Description
 
 Submits a request, where the POST data is json formatted control file.
+
 An authentication token is needed for this for this request. See [Authentication Section](#authentication) for more details.
 
 #### URL
@@ -631,6 +635,7 @@ POST https://rda.ucar.edu/api/submit
 #### Description
 
 Deletes a given RequestIndex. This may be necessary as Users may only have up to 8 requests open at a given time. By default an open request will be available for 7 days. Contact the specialist for the dataset to extend the amount of time it is available. 
+
 An authentication token is needed for this for this request. See [Authentication Section](#authentication) for more details.
 
 #### URL
