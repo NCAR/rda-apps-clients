@@ -62,7 +62,7 @@ To do this you would need to first find your token in [you user profile](https:/
 
 Next, you would append this token to the end of any url using `?token=[bearer token]. For example,
 ```
-https://rda.ucar.edu/api/get_status/?token=dkjf93f93jf8n9vdfh
+https://rda.ucar.edu/api/status/?token=dkjf93f93jf8n9vdfh
 ```
 This step is abstracted if using the python client, `rdams_client.py`
 
@@ -77,7 +77,7 @@ The list below is how to perform HTTPS `GET`, `POST`, and `DELETE` commands usin
 
     curl -X DELETE [URL]
 
-URL in these examples could be for example `https://rda.ucar.edu/api/summary/ds083.2` or `https://rda.ucar.edu/api/get_status` or `https://rda.ucar.edu/api/get_req_files/123456`
+URL in these examples could be for example `https://rda.ucar.edu/api/summary/ds083.2` or `https://rda.ucar.edu/api/status` or `https://rda.ucar.edu/api/get_req_files/123456`
 
 ------
 
@@ -448,13 +448,13 @@ Returns the status of all requests for user.
 #### URL
 
 ```
-GET https://rda.ucar.edu/api/get_status/[RequestIndex]
+GET https://rda.ucar.edu/api/status/[RequestIndex]
 ```
 
 Or, 
 
 ```
-GET https://rda.ucar.edu/api/get_status/
+GET https://rda.ucar.edu/api/status/
 ```
 
 #### Example Response
