@@ -31,39 +31,39 @@ At this stage, the (GDEX) REST API clients are available for Python (2.x and 3.x
 - We have written a python client to abstract the request and authentication details.
   + The client can be used as a command-line tool or as an imported python module to work with python objects directly.
   + In most cases, the client will print the JSON response after a command is entered.
-  + A Jupyter Notebook was created to show the basic functionality of rdams_client.py. 
-    - [The Jupyter Notebook can be found here](../src/python/rdams_client_example.ipynb)
-  + [rdams_client.py can be found here](../src/python/rdams_client.py)
+  + A Jupyter Notebook was created to show the basic functionality of gdex_client.py. 
+    - [The Jupyter Notebook can be found here](../src/python/gdex_client_example.ipynb)
+  + [gdex_client.py can be found here](../src/python/gdex_client.py)
 - All HTTPS requests to to the GDEX API must include a bearer token to access the API.
-  + Token information can be found on [you user profile](https://rda.ucar.edu/accounts/profile)
+  + Token information can be found on [you user profile](https://gdex.ucar.edu/accounts/profile)
 - Responses are JSON formatted.
   + Typically, error responses will give an explaination of what went wrong in the value of the `messages` key. 
   + If `status` is `ok`, then all relevant data will be in the value of the `result` key.
-- Feel free to contact the GDEX with questions: [rdahelp](mailto:datahelp@ucar.edu) or [Riley Conroy](mailto:rpconroy@ucar.edu)
+- Feel free to contact the GDEX with questions: [datahelp](mailto:datahelp@ucar.edu) or [Riley Conroy](mailto:rpconroy@ucar.edu)
 
 ------
 ### Install
 
 While the python client can simply be downloaded from github and used provided you have `requests` installed, we also have a package that can be installed using pip:
 
-    pip install rda-apps-clients
+    pip install gdex-api-client
 
-This gives you command line access to the command `rdams_client` that is a essentially an alias to rdams_client.py.
+This gives you command line access to the command `gdex_client` that is a essentially an alias to gdex_client.py.
 Additionally, you can programatically use the module via
     
-    from rda_apps_clients import rdams_client
+    from gdex_api_client import gdex_client
 
 ------
 ### Authentication
 
 `POST`, `DELETE`, and some user-specific 'GET' HTTP requests require that you include a bearer token in your URL.
-To do this you would need to first find your token in [you user profile](https://rda.ucar.edu/accounts/profile).
+To do this you would need to first find your token in [you user profile](https://gdex.ucar.edu/accounts/profile).
 
 Next, you would append this token to the end of any url using `?token=[bearer token]. For example,
 ```
-https://rda.ucar.edu/api/status/?token=dkjf93f93jf8n9vdfh
+https://gdex.ucar.edu/api/status/?token=dkjf93f93jf8n9vdfh
 ```
-This step is abstracted if using the python client, `rdams_client.py`
+This step is abstracted if using the python client, `gdex_client.py`
 
 ------
 ### Curl
@@ -76,7 +76,7 @@ The list below is how to perform HTTPS `GET`, `POST`, and `DELETE` commands usin
 
     curl -X DELETE [URL]
 
-URL in these examples could be for example `https://rda.ucar.edu/api/summary/ds083.2` or `https://rda.ucar.edu/api/status` or `https://rda.ucar.edu/api/get_req_files/123456`
+URL in these examples could be for example `https://gdex.ucar.edu/api/summary/ds083.2` or `https://gdex.ucar.edu/api/status` or `https://gdex.ucar.edu/api/get_req_files/123456`
 
 ------
 
@@ -90,7 +90,7 @@ The list below is how to perform HTTPS `GET`, `POST`, and `DELETE` commands usin
 
     wget --method=delete [URL]
 
-URL in these case could be for example `https://rda.ucar.edu/api/summary/ds083.2` or `https://rda.ucar.edu/api/request` or `https://rda.ucar.edu/api/request/123456`
+URL in these case could be for example `https://gdex.ucar.edu/api/summary/ds083.2` or `https://gdex.ucar.edu/api/request` or `https://gdex.ucar.edu/api/request/123456`
 
 ------
 
@@ -105,7 +105,7 @@ Returns a summary of datasets and dataset groups that have subsetting available.
 #### URL
 
 ```
-GET https://rda.ucar.edu/api/summary/[dsnnn.n]
+GET https://gdex.ucar.edu/api/summary/[dsnnn.n]
 ```
 
 #### Example Response
@@ -149,7 +149,7 @@ Returns a summary of only the Parameters in a dataset for subsetting.
 #### URL
 
 ```
-GET https://rda.ucar.edu/api/paramsummary/[dsnnn.n]
+GET https://gdex.ucar.edu/api/paramsummary/[dsnnn.n]
 ```
 
 #### Example Response
@@ -230,7 +230,7 @@ Returns full metadata of a dataset available for subsetting.
 #### URL
 
 ```
-GET https://rda.ucar.edu/api/metadata/[dsnnn.n]
+GET https://gdex.ucar.edu/api/metadata/[dsnnn.n]
 ```
 
 #### Example Response
@@ -447,13 +447,13 @@ Returns the status of all requests for user.
 #### URL
 
 ```
-GET https://rda.ucar.edu/api/status/[RequestIndex]
+GET https://gdex.ucar.edu/api/status/[RequestIndex]
 ```
 
 Or, 
 
 ```
-GET https://rda.ucar.edu/api/status/
+GET https://gdex.ucar.edu/api/status/
 ```
 
 #### Example Response
@@ -538,7 +538,7 @@ An authentication token is needed for this for this request. See [Authentication
 #### URL
 
 ```
-GET https://rda.ucar.edu/api/get_req_files/[RequestIndex]
+GET https://gdex.ucar.edu/api/get_req_files/[RequestIndex]
 ```
 
 #### Example Response
@@ -552,7 +552,7 @@ GET https://rda.ucar.edu/api/get_req_files/[RequestIndex]
         "total_size": 156,
         "web_files": [
             {
-                "web_path": "https://rda.ucar.edu/dsrqst/LASTNAME411039/Filename.extension",
+                "web_path": "https://gdex.ucar.edu/dsrqst/LASTNAME411039/Filename.extension",
                 "wfile": "Filename.extension",
                 "size": 156
             }
@@ -574,7 +574,7 @@ Returns an example control file for a give dataset.
 #### URL
 
 ```
-GET https://rda.ucar.edu/api/control_file_template/[dsxxx.x]
+GET https://gdex.ucar.edu/api/control_file_template/[dsxxx.x]
 ```
 
 #### Example Response
@@ -607,7 +607,7 @@ An authentication token is needed for this for this request. See [Authentication
 #### URL
 
 ```
-POST https://rda.ucar.edu/api/submit
+POST https://gdex.ucar.edu/api/submit
 ```
 
 #### Example Response
@@ -640,7 +640,7 @@ An authentication token is needed for this for this request. See [Authentication
 #### URL
 
 ```
-DELETE https://rda.ucar.edu/api/purge/[RequestIndex]
+DELETE https://gdex.ucar.edu/api/purge/[RequestIndex]
 ```
 
 #### Example Response
