@@ -1,2 +1,4 @@
 dist
 venv
+*egg-info*
+rdams_token.txt
