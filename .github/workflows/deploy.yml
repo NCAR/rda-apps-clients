@@ -9,9 +9,10 @@
 
 name: Publish Package to PyPI
 
-on:
-  release:
-    types: [published]
+#on:
+ # release:
+ #   types: [published]
+on: push
 jobs:
   build_package:
     name: build package and push to pypi
