@@ -1,0 +1,11 @@
+dataset=ds083.3
+date=201603020000/to/201603151200
+#datetype=init
+param=TMP/DPT/SPF H/R H/WEASD/V GRD/U GRD/PRES/PRMSL/HGT/ICEC/LAND/TSOIL/SOILW
+#level=DBLL:0.4,0.1/2,1
+#oformat=netCDF
+nlat=30
+slat=-25
+wlon=-150
+elon=-30
+targetdir=/glade/scratch

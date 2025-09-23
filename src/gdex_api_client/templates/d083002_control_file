@@ -1,0 +1,11 @@
+dataset=ds083.2
+date=201103020000/to/201103151200
+param=TMP/R H/ABS V
+level=ISBL:850/700/500
+oformat=netCDF
+nlat=30
+slat=-25
+wlon=-150
+elon=-30
+#groupindex=2
+targetdir=/glade/scratch

@@ -1,0 +1,21 @@
+#this is a rdams subset request control file template.  
+#Valid parameters output by the command 'rdams -get_metadata <dsnnn.n>' must be included for this file to be processed into a request.
+
+dataset=dsnnn.n                              # Required, use '-get_metadata' field 'dataset'
+date=YYYYMMDDHHMN/to/YYYYMMDDHHMM            # Required, use '-get_metadata' fields 'startdate' and 'enddate' as bounds
+datetype=init                                # Optional, use if you would like the date range to include data based on model initialization date/time instead of valid date/time
+param=SSSS/SSSS/SSSS                         # Required, use '-get_metadata' field 'param' or 'param_description'.  Separate multiple parameters with "/".
+level=SSSS:NNN/NNN;SSSS:NNN;SSSS:NNN/NNN     # Optional, use '-get_metadata' field 'level' or 'level_description' for 'SSSS'.
+                                             # Use '-get_metadata' field 'levelvalue' for 'NNN'.  Separate multiple level values with "/".
+oformat=SSSS                                 # Optional but required if spatial subsetting is requested on select datasets. Current options are netCDF or csv for single grid point extraction. 
+nlat=NN                                      # Optional, use for spatial subset requests 90 to -90
+slat=NN                                      # Optional, use for spatial subset requests 90 to -90
+wlon=NN                                      # Optional, use for spatial subset requests -180 to 180
+elon=NN                                      # Optional, use for spatial subset requests -180 to 180
+					     # To extract a single grid point at lat=yy.y,lon=xxx.x, set both nlat and slat=yy.y, and both elon and wlon = xxx.x
+product=SSSS/SSSS/SSSS                       # Optional, use '-get_metadata' field 'product'.  Separate multiple products with "/".
+gridproj=SSSS                                # Optional, use '-get_metadata' field 'gridproj'
+griddef=SSSS                                 # Optional, use '-get_metadata' field 'griddef'
+groupindex=NN                                # Optional, use '-get_summary' field 'groupindex' if available
+compression=NN                               # Optional, use 'GZ' for gzip, 'Z' for unix compress, 'BZ2' for bzip2, or 'ZIP' for Zip, for external users only
+targetdir=SSSS                               # Optional, request output will be created in current working directory if 'targetdir' is not set to a desired output directory.  This option is only available for NCAR HPC users.

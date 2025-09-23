@@ -145,7 +145,7 @@ def get_parser():
     Returns:
         (argparse.ArgumentParser): Parser object from which to parse arguments.
     """
-    description = "Queries NCAR RDA REST API."
+    description = "Queries NCAR GDEX REST API."
     parser = argparse.ArgumentParser(prog='rdams', description=description)
     parser.add_argument('-noprint', '-np',
             action='store_true',
@@ -360,12 +360,10 @@ def get_param_summary(ds):
 
 
 def submit_json(json_file):
-    """Submit a RDA subset or format conversion request using json file or dict.
+    """Submit a GDEX subset or format conversion request using json file or dict.
 
     Args:
-        json_file (str): json control file to submit.
-                OR
-                Python dict to submit.
+        json_file (str|dict): json control file to submit.
 
     Returns:
         dict: JSON decoded result of the query.
@@ -387,7 +385,7 @@ def submit_json(json_file):
     return ret.json()
 
 def submit(control_file_name):
-    """Submit a RDA subset or format conversion request.
+    """Submit a GDEX subset or format conversion request.
     Calls submit json after reading control_file
 
     Args:

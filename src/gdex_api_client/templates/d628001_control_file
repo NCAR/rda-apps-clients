@@ -1,0 +1,11 @@
+dataset=ds628.1
+date=198001010000/to/198003151200
+param=Pressure/u-component of wind/v-component of wind
+level=Isentropic (theta) level:475/550                    
+oformat=netCDF
+nlat=60
+slat=-25
+wlon=-170
+elon=-30
+product=Monthly Variance/Covariance (4 per day) of 0-hour Forecasts
+targetdir=/glade/scratch

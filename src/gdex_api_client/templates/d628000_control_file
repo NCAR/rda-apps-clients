@@ -1,0 +1,10 @@
+dataset=ds628.0
+date=198001010000/to/198003151200
+param=Temperature/LWHR/LRGMR
+level=Isobaric surface:10/300/500/600                     
+oformat=netCDF
+nlat=60
+slat=-25
+wlon=-170
+elon=-30
+targetdir=/glade/scratch

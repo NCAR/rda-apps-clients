@@ -1,0 +1,9 @@
+dataset=ds260.3
+date=197505120000/to/197506301200
+param=at/at_err_bias/at_err_rand/at_err_total/at_qflag/at_sdv
+nlat=77
+slat=-25
+wlon=-170
+elon=-26
+#product=Analysis
+targetdir=/glade/scratch

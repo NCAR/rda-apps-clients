@@ -1,0 +1,9 @@
+dataset=ds744.9
+date=199001010000/to/199012010000
+param=uwnd/vwnd/wspd
+nlat=77
+slat=-25
+wlon=-170
+elon=-10
+groupindex=4
+targetdir=/glade/scratch

@@ -1,0 +1,10 @@
+dataset=ds629.1
+date=200901010000/to/200903151200
+param=SLHF/STR/TSR
+oformat=netCDF
+nlat=65
+slat=-25
+wlon=-60
+elon=-30
+product=12-hour Forecast
+targetdir=/glade/scratch

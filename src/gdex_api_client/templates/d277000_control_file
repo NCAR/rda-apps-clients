@@ -1,0 +1,9 @@
+dataset=ds277.0
+date=199505120000/to/199506301200
+param=anom/err/sst
+nlat=77
+slat=-25
+wlon=-170
+elon=-26
+product=Analysis
+targetdir=/glade/scratch

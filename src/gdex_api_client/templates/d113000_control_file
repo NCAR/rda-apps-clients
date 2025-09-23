@@ -1,0 +1,10 @@
+dataset=ds113.0
+date=201209010000/to/201209312100
+param=T/Z/W/Q
+oformat=netCDF
+level=Isobaric surface:500/700
+nlat=80
+slat=-61
+wlon=-106
+elon=-57
+targetdir=/glade/scratch

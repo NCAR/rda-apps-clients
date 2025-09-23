@@ -1,0 +1,6 @@
+dataset=ds608.0
+date=199703010000/to/199703311200
+param=TMP/CLWMR/TKE
+level=ISBL:300/500
+oformat=netCDF
+targetdir=/glade/scratch

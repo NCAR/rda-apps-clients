@@ -1,0 +1,10 @@
+dataset=ds094.2
+date=201106010000/to/201106151200
+param=SPF H/A PCP
+oformat=netCDF
+nlat=60
+slat=-25
+wlon=-170
+elon=-30
+product=Monthly Mean (4 per day) of 6-hour Forecasts
+targetdir=/glade/scratch

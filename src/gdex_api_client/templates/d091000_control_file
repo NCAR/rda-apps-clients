@@ -1,0 +1,9 @@
+dataset=ds091.0
+date=201001010000/to/201003151200
+param=TMP/VVEL/ABSV/RH
+level=ISBL:500/700
+nlat=60
+slat=-25
+wlon=-170
+elon=-30
+targetdir=/glade/scratch

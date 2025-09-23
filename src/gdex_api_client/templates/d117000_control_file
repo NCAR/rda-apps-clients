@@ -1,0 +1,9 @@
+dataset=ds117.0
+date=197506150000/to/197506301200
+param=MSL/SSR/STRC
+oformat=netCDF
+nlat=60
+slat=-25
+wlon=-170
+elon=-30
+targetdir=/glade/scratch

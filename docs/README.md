@@ -1,12 +1,11 @@
-# RDA apps clients
+# GDEX apps clients
 
-This repository contains the Research Data Archive (RDA) apps clients.
-Subdirectories are organized by language, e.g. python, perl, c++, bash
+This repository contains the Geoscience Data Exchange (GDEX) API client for python.
 
-At this stage, the (RDA) REST API clients are available for Python (2.x and 3.x), see [src/python](src/python) for more details.
+At this stage, the (GDEX) REST API clients are available for Python (2.x and 3.x), see [src/python](src/python) for more details.
 
 
-# RDA External Application API Description
+# GDEX External Application API Description
 
 ## Table of Contents
 - [General Information](#general-info)
@@ -35,12 +34,12 @@ At this stage, the (RDA) REST API clients are available for Python (2.x and 3.x)
   + A Jupyter Notebook was created to show the basic functionality of rdams_client.py. 
     - [The Jupyter Notebook can be found here](../src/python/rdams_client_example.ipynb)
   + [rdams_client.py can be found here](../src/python/rdams_client.py)
-- All HTTPS requests to to the RDA APPS API must include a bearer token to access the API.
+- All HTTPS requests to to the GDEX API must include a bearer token to access the API.
   + Token information can be found on [you user profile](https://rda.ucar.edu/accounts/profile)
 - Responses are JSON formatted.
   + Typically, error responses will give an explaination of what went wrong in the value of the `messages` key. 
   + If `status` is `ok`, then all relevant data will be in the value of the `result` key.
-- Feel free to contact the RDA with questions: [rdahelp](mailto:rdahelp@ucar.edu) or [Riley Conroy](mailto:rpconroy@ucar.edu)
+- Feel free to contact the GDEX with questions: [rdahelp](mailto:datahelp@ucar.edu) or [Riley Conroy](mailto:rpconroy@ucar.edu)
 
 ------
 ### Install

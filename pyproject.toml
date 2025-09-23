@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "rda-apps-clients"
+version = "1.0.2"
+dependencies = [
+    "requests",
+]
+authors = [
+    {name = "GDEX data Help", email = "datahelp@ucar.edu"}
+]
+description = "CLI and library for calling GDEX API"
+readme = "docs/README.md"
+license = "MIT"
+keywords = ["API", "Geoscience", "GDEX"]
+[project.urls]
+Homepage = "https://gdex.ucar/edu"
+[project.scripts]
+gdex_client = "gdex_api_client.gdex_client:main"

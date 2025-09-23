@@ -1,0 +1,13 @@
+dataset=ds094.1
+date=201106010000/to/201106151200
+param=PVORT
+level=THEL:450/550
+oformat=netCDF
+nlat=60
+slat=-25
+wlon=-170
+elon=-30
+product=Analysis
+#gridproj=gaussLatLon
+#griddef=1760:880:89.844N:0E:89.844S:359.795E:0.205:440
+targetdir=/glade/scratch

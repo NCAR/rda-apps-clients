@@ -1,6 +1,6 @@
-# `rdams_client` for Python
+# `gdex_client` for Python
 
-The `rdams_client` Python utility can be run by registered RDA users to get detailed metadata for RDA data sets, to submit subset requests on select gridded data sets, to check on the processing status of any subset requests, and to download completed request output files to a local system.
+The `gdex_client` Python utility can be run by registered GDEX users to get detailed metadata for GDEX data sets, to submit subset requests on select gridded data sets, to check on the processing status of any subset requests, and to download completed request output files to a local system.
 
 The script can be used both on the command line or loaded as a module to interact with the response object directly. The Jupyter Notebooks in this directory provides an example of how you could potentially use the module.
 

@@ -1,0 +1,12 @@
+dataset=ds117.2
+date=197506150000/to/197506301200
+param=Q
+#level=Hybrid level:30
+oformat=netCDF
+nlat=60
+slat=-25
+wlon=-170
+elon=-30
+gridproj=gaussLatLon
+griddef=-1:160:89.141N:0E:89.141S:358.875E:1.125:80
+targetdir=/glade/scratch

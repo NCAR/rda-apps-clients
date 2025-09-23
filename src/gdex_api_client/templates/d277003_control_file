@@ -1,0 +1,8 @@
+dataset=ds277.3
+date=199505120000/to/199506301200
+param=sic
+nlat=77
+slat=-25
+wlon=-170
+elon=-26
+targetdir=/glade/scratch

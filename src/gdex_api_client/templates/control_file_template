@@ -1,0 +1,19 @@
+#this is a rdams subset request control file template.  
+#Valid parameters output by the command 'rdams -getmetadata <dsnnn.n>' must be included for this file to be processed into a request.
+
+dataset=dsnnn.n                              # Required, use '-getmetadata' field 'dataset'
+date=YYYYMMDDHHMN/to/YYYYMMDDHHMM            # Required, use '-getmetadata' fields 'startdate' and 'enddate' as bounds
+param=SSSS/SSSS/SSSS                         # Required, use '-getmetadata' field 'param' or 'param_description'.  Separate multiple parameters with "/".
+level=SSSS:NNN/NNN;SSSS:NNN;SSSS:NNN/NNN     # Optional, use '-get_metadata' field 'level' or 'level_description' for 'SSSS'.
+                                             # Use '-get_metadata' field 'levelvalue' for 'NNN'.  Separate multiple level values with "/".
+oformat=netCDF                               # Optional but required if spatial subsetting is requested on select datasets.  
+nlat=NN                                      # Optional, use for spatial subset requests 90 to -90
+slat=NN                                      # Optional, use for spatial subset requests 90 to -90
+wlon=NN                                      # Optional, use for spatial subset requests -180 to 180
+elon=NN                                      # Optional, use for spatial subset requests -180 to 180
+product=SSSS/SSSS/SSSS                       # Optional, use '-getmetadata' field 'product'.  Separate multiple products with "/".
+gridproj=SSSS                                # Optional, use '-getmetadata' field 'gridproj'
+griddef=SSSS                                 # Optional, use '-getmetadata' field 'griddef'
+groupindex=NN                                # Optional, use '-getsummary' field 'groupindex' if available
+compression=NN                               # Optional, use 'GZ' for gzip, 'Z' for unix compress, 'BZ2' for bzip2, or 'ZIP' for Zip, for external users only
+targetdir=SSSS                               # Optional, request output will be created in current working directory if 'targetdir' is not set to a desired output directory.  This option is only available for NCAR HPC users.

@@ -1,0 +1,5 @@
+dataset=ds601.0
+date=199703010000/to/199703311200
+param=Z/PVO/TK
+level=lev@@mb:300/500
+targetdir=/glade/scratch

@@ -1,0 +1,11 @@
+dataset=ds629.3
+date=200901010000/to/200903151200
+param=Z/D/Q/W
+level=Isobaric surface:250/300/500
+oformat=netCDF
+nlat=65
+slat=-25
+wlon=-60
+elon=-30
+product=6-hour Forecast
+targetdir=/glade/scratch

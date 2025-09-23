@@ -1,0 +1,13 @@
+dataset=ds093.0
+date=198001010000/to/198003151200
+param=HGT/TMP
+level=ISBL:500/300
+oformat=netCDF
+nlat=60
+slat=-25
+wlon=-170
+elon=-30
+product=Analysis
+gridproj=latLon
+griddef=144:73:90N:0E:90S:357.5E:2.5:2.5
+targetdir=/glade/scratch

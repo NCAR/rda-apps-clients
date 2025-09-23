@@ -1,0 +1,12 @@
+dataset=ds093.2
+date=201002010000/to/201003010000
+param=CPRAT
+level=SFC:0
+oformat=netCDF
+nlat=60
+slat=-25
+wlon=-170
+elon=-30
+gridproj=latLon
+griddef=720:361:90N:0E:90S:359.5E:0.5:0.5
+targetdir=/glade/scratch

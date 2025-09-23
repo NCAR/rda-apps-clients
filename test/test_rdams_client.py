@@ -4,14 +4,14 @@ Tests the functionality of rdams_client.py
 """
 
 import sys
-sys.path.append('../src/python/')
-import rdams_client as rc
+sys.path.append('../src/')
+from gdex_api_client import gdex_client as gc
 
 
 
 
-assert rc.add_ds_str('083.2') == 'ds083.2'
-assert rc.add_ds_str('ds083.2') == 'ds083.2'
+assert gc.add_ds_str('083.2') == 'ds083.2'
+assert gc.add_ds_str('ds083.2') == 'ds083.2'
 
 
 print('All tests succesful')

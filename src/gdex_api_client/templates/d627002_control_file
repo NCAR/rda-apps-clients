@@ -1,0 +1,10 @@
+dataset=ds627.2
+date=198001010000/to/198003151200
+param=Maximum 2 metre temperature since previous post-processing
+oformat=netCDF
+nlat=65
+slat=-25
+wlon=-170
+elon=-30
+format=netCDF
+targetdir=/glade/scratch
