@@ -4,18 +4,18 @@ check on request status.
 
 Usage:
 ```
-rdams-client.py -get_summary <dsnnn.n>
-rdams-client.py -get_metadata <dsnnn.n> <-f>
-rdams-client.py -get_param_summary <dsnnn.n> <-f>
-rdams-client.py -submit [control_file_name]
-rdams-client.py -get_status <RequestIndex> <-proc_status>
-rdams-client.py -download [RequestIndex]
-rdams-client.py -globus_download [RequestIndex]
-rdams-client.py -get_control_file_template <dsnnn.n>
-rdams-client.py -help
+gdex_client.py -get_summary <dsnnn.n>
+gdex_client.py -get_metadata <dsnnn.n> <-f>
+gdex_client.py -get_param_summary <dsnnn.n> <-f>
+gdex_client.py -submit [control_file_name]
+gdex_client.py -get_status <RequestIndex> <-proc_status>
+gdex_client.py -download [RequestIndex]
+gdex_client.py -globus_download [RequestIndex]
+gdex_client.py -get_control_file_template <dsnnn.n>
+gdex_client.py -help
 ```
 """
-__version__ = '3.0.0'
+__version__ = '2.0.0'
 __author__ = 'Doug Schuster (schuster@ucar.edu), Riley Conroy (rpconroy@ucar.edu)'
 
 import sys
@@ -29,7 +29,7 @@ import pdb
 
 
 BASE_URL = 'https://gdex.ucar.edu/api/'
-DEFAULT_AUTH_FILE = './rdams_token.txt'
+DEFAULT_AUTH_FILE = './gdex_token.txt'
 
 # Python 2 compatibility
 try:
@@ -81,7 +81,7 @@ def add_ds_str(ds_num):
 
 def get_userinfo():
     """Get token from command line."""
-    print('Please visit https://rda.ucar.edu/accounts/profile/ to access token.')
+    print('Please visit https://gdex.ucar.edu/accounts/profile/ to access token.')
     token = input("Paste that token here: ")
     write_token_file(token)
     return token
@@ -146,7 +146,7 @@ def get_parser():
         (argparse.ArgumentParser): Parser object from which to parse arguments.
     """
     description = "Queries NCAR GDEX REST API."
-    parser = argparse.ArgumentParser(prog='rdams', description=description)
+    parser = argparse.ArgumentParser(prog='gdex_client', description=description)
     parser.add_argument('-noprint', '-np',
             action='store_true',
             required=False,
@@ -568,6 +568,8 @@ def get_selected_function(args_dict):
         if opt in action_map and value is not None:
             return (action_map[opt], value)
 
+def main():
+    query(sys.argv[1:])
 
 if __name__ == "__main__":
     """Calls main method"""
