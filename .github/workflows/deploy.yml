@@ -13,10 +13,9 @@ name: Publish Package to PyPI
 #  release:
 #    types: [published]
 on:
-  push:
-    branches:
-      - main
   pull_request:
+    types:
+      - closed
     branches:
       - main
 jobs:
