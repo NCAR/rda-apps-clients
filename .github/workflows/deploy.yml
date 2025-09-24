@@ -13,6 +13,11 @@ name: Publish Package to PyPI
 #  release:
 #    types: [published]
 on: push
+  branches:
+    - main
+  pull_request:
+    branches:
+      - main
 jobs:
   build_package:
     name: build package and push to pypi
