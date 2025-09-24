@@ -68,18 +68,6 @@ def query(args=None):
         print(json.dumps(result, indent=3))
     return result
 
-def add_ds_str(ds_num):
-    """Adds 'ds' to ds_num if needed.
-    Throws error if ds number isn't valid.
-    """
-    ds_num = ds_num.strip()
-    if ds_num[0:2] != 'ds':
-        ds_num = 'ds' + ds_num
-    if len(ds_num) != 7:
-        print("'" + ds_num + "' is not valid.")
-        sys.exit()
-    return ds_num
-
 def validate_dsid(dsid):
     """ Validate dsid from command line input """
     ms = re.match(r'^([a-z]{1})(\d{3})(\d{3})$', dsid)
@@ -520,10 +508,11 @@ def write_control_file_template(ds, write_location='./'):
     Returns:
         dict: JSON decoded result of the query.
     """
+    dsid = validate_dsid(ds)
     _json = get_control_file_template(ds)
     control_str = _json['data']['template']
 
-    template_filename = write_location + add_ds_str(ds) + '_control.ctl'
+    template_filename = write_location + dsid + '_control.ctl'
     if os.path.exists(template_filename):
         print(template_filename + " already exists.\nExiting")
         exit(1)
