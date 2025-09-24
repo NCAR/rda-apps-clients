@@ -17,8 +17,10 @@ jobs:
   build_package:
     name: build package and push to pypi
     runs-on: ubuntu-latest
+    environment: pypi
     permissions:
       contents: read
+      deployments: write
       id-token: write
 
     steps:
