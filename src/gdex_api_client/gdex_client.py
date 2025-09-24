@@ -26,6 +26,7 @@ import json
 import argparse
 import codecs
 import pdb
+import ms
 
 
 BASE_URL = 'https://gdex.ucar.edu/api/'
@@ -78,6 +79,14 @@ def add_ds_str(ds_num):
         print("'" + ds_num + "' is not valid.")
         sys.exit()
     return ds_num
+
+def validate_dsid(dsid):
+    """ Validate dsid from command line input """
+    ms = re.match(r'^([a-z]{1})(\d{3})(\d{3})$', dsid)
+    if ms:
+        return dsid
+    else:
+        raise click.BadParameter("format must be 'dnnnnnn'")
 
 def get_userinfo():
     """Get token from command line."""
