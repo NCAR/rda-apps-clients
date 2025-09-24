@@ -20,6 +20,7 @@ jobs:
     environment: pypi
     permissions:
       contents: read
+      deployments: write
       id-token: write
 
     steps:
