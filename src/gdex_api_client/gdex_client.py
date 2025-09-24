@@ -26,7 +26,7 @@ import json
 import argparse
 import codecs
 import pdb
-import ms
+import re
 
 
 BASE_URL = 'https://gdex.ucar.edu/api/'
@@ -86,7 +86,7 @@ def validate_dsid(dsid):
     if ms:
         return dsid
     else:
-        raise click.BadParameter("format must be 'dnnnnnn'")
+        raise ValueError("dataset number 'dsid' must be formatted as 'dnnnnnn'")
 
 def get_userinfo():
     """Get token from command line."""
