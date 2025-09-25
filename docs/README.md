@@ -2,7 +2,7 @@
 
 This repository contains the Geoscience Data Exchange (GDEX) API client for python.
 
-At this stage, the (GDEX) REST API clients are available for Python (2.x and 3.x), see [src/gdex_api_client](src/gdex_api_client) for more details.
+At this stage, the (GDEX) REST API clients are available for Python (2.x and 3.x), see [../src/gdex_api_client](src/gdex_api_client) for more details.
 
 
 # GDEX External Application API Description
