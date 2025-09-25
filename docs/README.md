@@ -32,10 +32,10 @@ At this stage, the (GDEX) REST API clients are available for Python (2.x and 3.x
   + The client can be used as a command-line tool or as an imported python module to work with python objects directly.
   + In most cases, the client will print the JSON response after a command is entered.
   + A Jupyter Notebook was created to show the basic functionality of gdex_client.py. 
-    - [The Jupyter Notebook can be found here](../src/python/gdex_client_example.ipynb)
-  + [gdex_client.py can be found here](../src/python/gdex_client.py)
+    - [The Jupyter Notebook can be found here](../src/gdex_api_client/gdex_client_example.ipynb)
+  + [gdex_client.py can be found here](../src/gdex_api_client/gdex_client.py)
 - All HTTPS requests to to the GDEX API must include a bearer token to access the API.
-  + Token information can be found on [you user profile](https://gdex.ucar.edu/accounts/profile)
+  + Token information can be found on [your user profile](https://gdex.ucar.edu/accounts/profile)
 - Responses are JSON formatted.
   + Typically, error responses will give an explaination of what went wrong in the value of the `messages` key. 
   + If `status` is `ok`, then all relevant data will be in the value of the `result` key.
@@ -57,7 +57,7 @@ Additionally, you can programatically use the module via
 ### Authentication
 
 `POST`, `DELETE`, and some user-specific 'GET' HTTP requests require that you include a bearer token in your URL.
-To do this you would need to first find your token in [you user profile](https://gdex.ucar.edu/accounts/profile).
+To do this you would need to first find your token in [your user profile](https://gdex.ucar.edu/accounts/profile).
 
 Next, you would append this token to the end of any url using `?token=[bearer token]. For example,
 ```
@@ -76,7 +76,7 @@ The list below is how to perform HTTPS `GET`, `POST`, and `DELETE` commands usin
 
     curl -X DELETE [URL]
 
-URL in these examples could be for example `https://gdex.ucar.edu/api/summary/ds083.2` or `https://gdex.ucar.edu/api/status` or `https://gdex.ucar.edu/api/get_req_files/123456`
+URL in these examples could be for example `https://gdex.ucar.edu/api/summary/d083002` or `https://gdex.ucar.edu/api/status` or `https://gdex.ucar.edu/api/get_req_files/123456`
 
 ------
 
@@ -90,7 +90,7 @@ The list below is how to perform HTTPS `GET`, `POST`, and `DELETE` commands usin
 
     wget --method=delete [URL]
 
-URL in these case could be for example `https://gdex.ucar.edu/api/summary/ds083.2` or `https://gdex.ucar.edu/api/request` or `https://gdex.ucar.edu/api/request/123456`
+URL in these case could be for example `https://gdex.ucar.edu/api/summary/d083002` or `https://gdex.ucar.edu/api/request` or `https://gdex.ucar.edu/api/request/123456`
 
 ------
 
@@ -105,7 +105,7 @@ Returns a summary of datasets and dataset groups that have subsetting available.
 #### URL
 
 ```
-GET https://gdex.ucar.edu/api/summary/[dsnnn.n]
+GET https://gdex.ucar.edu/api/summary/[dnnnnnn]
 ```
 
 #### Example Response
@@ -149,7 +149,7 @@ Returns a summary of only the Parameters in a dataset for subsetting.
 #### URL
 
 ```
-GET https://gdex.ucar.edu/api/paramsummary/[dsnnn.n]
+GET https://gdex.ucar.edu/api/paramsummary/[dnnnnnn]
 ```
 
 #### Example Response
@@ -160,7 +160,7 @@ GET https://gdex.ucar.edu/api/paramsummary/[dsnnn.n]
    "https_response": 200,
    "messages": [],
    "result": {
-      "dsid": "083.2",
+      "dsid": "d083002",
       "subsetting_available": true,
       "data": [
          {
@@ -230,7 +230,7 @@ Returns full metadata of a dataset available for subsetting.
 #### URL
 
 ```
-GET https://gdex.ucar.edu/api/metadata/[dsnnn.n]
+GET https://gdex.ucar.edu/api/metadata/[dnnnnnn]
 ```
 
 #### Example Response
@@ -585,7 +585,7 @@ GET https://gdex.ucar.edu/api/control_file_template/[dsxxx.x]
    "https_response": 200,
    "messages": [],
    "result": {
-      "template": "dataset=ds083.2\ndate=201103020000/to/201103151200\nparam=TMP/R H/ABS V\nlevel=ISBL:850/700/500\noformat=netCDF\nnlat=30\nslat=-25\nwlon=-150\nelon=-30\n#groupindex=2\ntargetdir=/glade/scratch\n"
+      "template": "dataset=d083002\ndate=201103020000/to/201103151200\nparam=TMP/R H/ABS V\nlevel=ISBL:850/700/500\noformat=netCDF\nnlat=30\nslat=-25\nwlon=-150\nelon=-30\n#groupindex=2\ntargetdir=/glade/scratch\n"
    },
    "request_end": "2020-03-03T11:44:21.842582",
    "request_start": "2020-03-03T11:44:21.835081"
