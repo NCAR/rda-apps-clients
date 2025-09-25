@@ -51,7 +51,7 @@ def query(args=None):
         ```
         >>> query(['-get_status', '123456'])
 
-        >>> query(['-get_metadata', 'ds083.2'])
+        >>> query(['-get_metadata', 'd083002'])
         ```
     """
     parser = get_parser()
@@ -288,7 +288,7 @@ def get_summary(ds):
     """Returns summary of dataset.
 
     Args:
-        ds (str): Datset id. e.g. 'ds083.2'
+        ds (str): Datset id. e.g. 'd083002'
 
     Returns:
         dict: JSON decoded result of the query.
@@ -306,7 +306,7 @@ def get_metadata(ds):
     """Return metadata of dataset.
 
     Args:
-        ds (str): Datset id. e.g. 'ds083.2'
+        ds (str): Datset id. e.g. 'd083002'
 
     Returns:
         dict: JSON decoded result of the query.
@@ -324,7 +324,7 @@ def get_all_params(ds):
     """Return set of parameters for a dataset.
 
     Args:
-        ds (str): Datset id. e.g. 'ds083.2'
+        ds (str): Datset id. e.g. 'd083002'
 
     Returns:
         set: All unique params in dataset.
@@ -341,7 +341,7 @@ def get_param_summary(ds):
     """Return summary of parameters for a dataset.
 
     Args:
-        ds (str): Datset id. e.g. 'ds083.2'
+        ds (str): Datset id. e.g. 'd083002'
 
     Returns:
         dict: JSON decoded result of the query.
@@ -483,7 +483,7 @@ def get_control_file_template(ds):
     """Write a control file for use in subset requests.
 
     Args:
-        ds (str): datset id. e.g. 'ds083.2'
+        ds (str): datset id. e.g. 'd083002'
 
     Returns:
         dict: JSON decoded result of the query.
@@ -501,7 +501,7 @@ def write_control_file_template(ds, write_location='./'):
     """Write a control file for use in subset requests.
 
     Args:
-        ds (str): datset id. e.g. 'ds083.2'
+        ds (str): datset id. e.g. 'd083002'
         write_location (str, Optional): Directory in which to write.
                 Defaults to working directory
 
@@ -509,7 +509,7 @@ def write_control_file_template(ds, write_location='./'):
         dict: JSON decoded result of the query.
     """
     dsid = validate_dsid(ds)
-    _json = get_control_file_template(ds)
+    _json = get_control_file_template(dsid)
     control_str = _json['data']['template']
 
     template_filename = write_location + dsid + '_control.ctl'
@@ -525,7 +525,7 @@ def purge_request(request_idx):
     """Write a control file for use in subset requests.
 
     Args:
-        ds (str): datset id. e.g. 'ds083.2'
+        ds (str): datset id. e.g. 'd083002'
         write_location (str, Optional): Directory in which to write.
                 Defaults to working directory
 
