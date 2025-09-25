@@ -3,7 +3,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 [project]
 name = "gdex-api-client"
-version = "2.0.7"
+version = "2.0.8"
 dependencies = [
     "requests",
 ]
